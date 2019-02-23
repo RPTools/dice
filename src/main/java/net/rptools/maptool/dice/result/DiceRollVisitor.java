@@ -46,7 +46,7 @@ public class DiceRollVisitor extends DiceExprBaseVisitor<DiceResultNode> {
     }
 
     /*@Override
-    public DiceExprResult visitParenExpr(DiceExprParser.ParenExprContext ctx) {
+    public DiceExprResult visitParenExpr(DiceExpression.ParenExprContext ctx) {
         return visit(ctx.val);
     }*/
 

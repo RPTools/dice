@@ -4,15 +4,13 @@ import net.rptools.maptool.dice.result.DiceResultNode;
 import net.rptools.maptool.dice.result.DiceRollVisitor;
 import net.rptools.maptool.dice.symbols.DefaultDiceExpressionSymbolTable;
 import net.rptools.maptool.dice.symbols.DiceEvalScope;
-import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import java.io.File;
-import java.io.FileInputStream;
 
 public class DiceTest {
 
@@ -27,13 +25,13 @@ public class DiceTest {
 
 
         // Create a CharStream  that reads from standard input
-        ANTLRInputStream input;
+        CharStream input;
         if (args[0].equals("-")) {
             System.out.println("DiceEvalType in Script");
-            input = new ANTLRInputStream(System.in);
+            input = CharStreams.fromStream(System.in);
         } else {
             System.out.println("Reading Script: '" + args[0] +"'");
-            input = new ANTLRInputStream(new FileInputStream(new File(args[0])));
+            input = CharStreams.fromFileName(args[0]);
         }
 
         // Create a lexer that feeds off of input CharStream
