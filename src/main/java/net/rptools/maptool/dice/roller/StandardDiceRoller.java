@@ -1,8 +1,11 @@
 package net.rptools.maptool.dice.roller;
 
-import net.rptools.maptool.dice.DiceExprResultOld;
+import net.rptools.maptool.dice.result.DiceExprResult;
+import net.rptools.maptool.dice.result.DiceRolls;
+import net.rptools.maptool.dice.result.DieRoll;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -17,7 +20,7 @@ public class StandardDiceRoller implements DiceRoller {
 
 
     @Override
-    public DiceExprResultOld roll(String pattern, int numDice, int numSides) {
+    public DiceExprResult roll(String pattern, int numDice, int numSides) {
         //final List<Integer> rolls = new LinkedList<>();
         //random.ints(numDice, 1, numSides).forEach(rolls::add);
         int[] rolls;
@@ -30,10 +33,12 @@ public class StandardDiceRoller implements DiceRoller {
 
         int sum = 0;
 
+        var dieRolls = new ArrayList<DieRoll>(rolls.length);
         for (int val : rolls) {
             sum += val;
+            dieRolls.add(new DieRoll(val));
         }
 
-        return new DiceExprResultOld(sum, rolls);
+        return new DiceExprResult(sum, new DiceRolls(dieRolls));
     }
 }

@@ -40,12 +40,11 @@ expr                        : left=expr op='^' right=expr                   # bi
                             | integerValue                                  # integerVal
                             | doubleValue                                   # doubleVal
                             | STRING                                        # string
-                            //| '(' val=diceExpr ')'                          # parenExpr
                             | group                                         # groupExpr
                             ;
 
-group                       : '(' val=diceExpr ')'
-                            | '{' val=diceExpr '}'
+group                       : '(' val=diceExpr ')'                          # parenGroup
+                            | '{' val=diceExpr '}'                          # braceGroup
                             ;
 
 dice                        : numDice? diceName=WORD diceSides diceArgumentList?

@@ -1,6 +1,6 @@
 package net.rptools.maptool.dice.symbols;
 
-import net.rptools.maptool.dice.DiceExprResultOld;
+import net.rptools.maptool.dice.result.DiceExprResult;
 
 import java.util.Set;
 
@@ -15,7 +15,7 @@ public interface DiceExpressionSymbolTable {
      * @param name The name of the variable to get the value for.
      * @return the value stored against the variable.
      */
-    DiceExprResultOld getVariableValue(DiceEvalScope scope, String name);
+    DiceExprResult getVariableValue(DiceEvalScope scope, String name);
 
     /**
      * Checks to see if the specified variable has been defined in a certain scope.
@@ -31,7 +31,7 @@ public interface DiceExpressionSymbolTable {
      * @param name The name of the variable.
      * @param value The value to set the variable to.
      */
-    void setVariableValue(DiceEvalScope scope, String name, DiceExprResultOld value);
+    void setVariableValue(DiceEvalScope scope, String name, DiceExprResult value);
 
     /**
      * Returns the names of the variables defined for the specified scope.

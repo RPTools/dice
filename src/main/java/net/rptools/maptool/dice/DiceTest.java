@@ -1,5 +1,7 @@
 package net.rptools.maptool.dice;
 
+import net.rptools.maptool.dice.result.DiceResultNode;
+import net.rptools.maptool.dice.result.DiceRollVisitor;
 import net.rptools.maptool.dice.symbols.DefaultDiceExpressionSymbolTable;
 import net.rptools.maptool.dice.symbols.DiceEvalScope;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -13,6 +15,8 @@ import java.io.File;
 import java.io.FileInputStream;
 
 public class DiceTest {
+
+    private final static DefaultDiceExpressionSymbolTable symbolTable = new DefaultDiceExpressionSymbolTable();
 
     public static void  main(String[] args) throws Exception {
 
@@ -43,74 +47,55 @@ public class DiceTest {
 
 
         ParseTree tree = parser.diceRolls();
-        System.out.println();
+        /*System.out.println();
         System.out.println();
         System.out.println(tree.toStringTree(parser));
-        System.out.println();
+        System.out.println();*/
 
         // Create a generic parse tree walker that can trigger callbacks
         ParseTreeWalker walker = new ParseTreeWalker();
         // Walk the tree created during the parse, trigger callbacks
 //        walker.walk(new PrintDiceDetails(), tree);
-        var visitor = new DiceRollVisitor(new DefaultDiceExpressionSymbolTable());
+        var visitor = new DiceRollVisitor();
         visitor.visit(tree);
-        System.out.println();
+        /*System.out.println();
         System.out.println();
 
+
+        //printAST(((MTScriptParser.ScriptContext) tree).getRuleContext());
+
+        System.out.println();
+        System.out.println();*/
+
+        for (DiceResultNode node : visitor.getResults()) {
+            node.evaluate(symbolTable);
+            //System.out.println(node.getFormattedText());
+        }
+
+
         System.out.println("Local Variables");
-        visitor.getSymbolTable().getVariableNames(DiceEvalScope.LOCAL).forEach(name -> {
-                var val = visitor.getSymbolTable().getVariableValue(DiceEvalScope.LOCAL, name);
-                System.out.println(val.getType() + ":" + name + " = " + val.getStringResult());
+        symbolTable.getVariableNames(DiceEvalScope.LOCAL).forEach(name -> {
+            var val = symbolTable.getVariableValue(DiceEvalScope.LOCAL, name);
+            System.out.println(val.getType() + ":" + name + " = " + val.getStringResult());
         });
         System.out.println();
 
 
         System.out.println("Global Variables");
-        visitor.getSymbolTable().getVariableNames(DiceEvalScope.GLOBAL).forEach(name -> {
-            var val = visitor.getSymbolTable().getVariableValue(DiceEvalScope.GLOBAL, name);
+        symbolTable.getVariableNames(DiceEvalScope.GLOBAL).forEach(name -> {
+            var val = symbolTable.getVariableValue(DiceEvalScope.GLOBAL, name);
             System.out.println(val.getType() + ":" + name + " = " + val.getStringResult());
         });
         System.out.println();
 
 
         System.out.println("Property Variables");
-        visitor.getSymbolTable().getVariableNames(DiceEvalScope.PROPERTY).forEach(name -> {
-            var val = visitor.getSymbolTable().getVariableValue(DiceEvalScope.PROPERTY, name);
+        symbolTable.getVariableNames(DiceEvalScope.PROPERTY).forEach(name -> {
+            var val = symbolTable.getVariableValue(DiceEvalScope.PROPERTY, name);
             System.out.println(val.getType() + ":" + name + " = " + val.getStringResult());
         });
         System.out.println();
-
-        //printAST(((MTScriptParser.ScriptContext) tree).getRuleContext());
-
-        System.out.println();
-        System.out.println();
-
-        for (DiceExprResultOld res : visitor.getResults()) {
-            System.out.println(res);
-        }
     }
 
 
-    public static void printAST(RuleContext ctx) {
-        explore(ctx, 0);
-    }
-
-    public static void explore(RuleContext ctx, int indentation) {
-        //String ruleName = MTScriptParser.ruleNames[ctx.getRuleIndex()];
-        for (int i =0; i < indentation; i++) {
-            System.out.print(" ");
-        }
-        //System.out.println('*' + ruleName);
-        for (int i = 0; i < ctx.getChildCount(); i++) {
-            ParseTree element = ctx.getChild(i);
-            if (element instanceof RuleContext) {
-                explore((RuleContext) element, indentation + 4);
-            } else {
-                for (int x =0; x < indentation + 4; x++) {
-                    System.out.print(" ");
-                }
-                System.out.println('-' + element.toString());
-            }
-        }
-    }
 }

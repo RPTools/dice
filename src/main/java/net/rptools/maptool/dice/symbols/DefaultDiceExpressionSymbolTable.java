@@ -1,6 +1,7 @@
 package net.rptools.maptool.dice.symbols;
 
-import net.rptools.maptool.dice.DiceExprResultOld;
+
+import net.rptools.maptool.dice.result.DiceExprResult;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.Set;
 public class DefaultDiceExpressionSymbolTable implements DiceExpressionSymbolTable {
 
     /** The variables that have been set and their scopes. */
-    private final Map<DiceEvalScope, Map<String, DiceExprResultOld>> variables = new HashMap<>();
+    private final Map<DiceEvalScope, Map<String, DiceExprResult>> variables = new HashMap<>();
 
 
     /**
@@ -26,7 +27,7 @@ public class DefaultDiceExpressionSymbolTable implements DiceExpressionSymbolTab
     }
 
     @Override
-    public DiceExprResultOld getVariableValue(DiceEvalScope scope, String name) {
+    public DiceExprResult getVariableValue(DiceEvalScope scope, String name) {
         return variables.get(scope).get(name);
     }
 
@@ -36,7 +37,7 @@ public class DefaultDiceExpressionSymbolTable implements DiceExpressionSymbolTab
     }
 
     @Override
-    public void setVariableValue(DiceEvalScope scope, String name, DiceExprResultOld value) {
+    public void setVariableValue(DiceEvalScope scope, String name, DiceExprResult value) {
         variables.get(scope).put(name, value);
     }
 

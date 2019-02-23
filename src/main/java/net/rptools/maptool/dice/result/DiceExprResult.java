@@ -1,12 +1,13 @@
 package net.rptools.maptool.dice.result;
 
 
-import net.rptools.maptool.dice.InvalidExprOperation;
 
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
-import java.util.zip.DeflaterInputStream;
 
+/**
+ * This class represents the result of an expression in the dice rolling scripting language..
+ */
 public final class DiceExprResult {
 
     /** The type of the result. */
@@ -24,36 +25,64 @@ public final class DiceExprResult {
     /** Can this result be numeric. */
     private final boolean hasNumericRepresentation;
 
+    /** The dice rolls if any that go to make up this result. */
+    private final DiceRolls diceRolls;
+
 
     /**
      * Creates an Integer result.
      * @param result the integer value of the result.
+     * @param rolls the rolls that go to make up
      */
-    private DiceExprResult(int result) {
+    public DiceExprResult(int result, DiceRolls rolls) {
         type = DiceResultType.INTEGER;
         intResult = result;
         doubleResult = result;
         stringResult = Integer.toString(result);
         hasNumericRepresentation = true;
+
+        diceRolls = rolls;
     }
+
+
+    /**
+     * Creates an Integer result.
+     * @param result the integer value of the result.
+     */
+    public DiceExprResult(int result) {
+        this(result, DiceRolls.NO_ROLLS);
+    }
+
+    /**
+     * Creates a Double result.
+     * @param result the double representation of the result.
+     * @param rolls the rolls that go to make up
+     */
+    private DiceExprResult(double result, DiceRolls rolls) {
+        type = DiceResultType.DOUBLE;
+        intResult = (int) result;
+        doubleResult = result;
+        stringResult = Double.toString(result);
+        hasNumericRepresentation = true;
+
+        diceRolls = rolls;
+    }
+
 
     /**
      * Creates a Double result.
      * @param result the double representation of the result.
      */
     private DiceExprResult(double result) {
-        type = DiceResultType.DOUBLE;
-        intResult = (int) result;
-        doubleResult = result;
-        stringResult = Double.toString(result);
-        hasNumericRepresentation = true;
+        this(result, DiceRolls.NO_ROLLS);
     }
 
     /**
      * Creates a String result.
      * @param result the String representation of the result.
+     * @param rolls the rolls that go to make up
      */
-    private DiceExprResult(String result) {
+    private DiceExprResult(String result, DiceRolls rolls) {
         type = DiceResultType.STRING;
         stringResult = result;
         double dres = 0.0;
@@ -68,6 +97,16 @@ public final class DiceExprResult {
         hasNumericRepresentation = numeric;
         doubleResult = dres;
         intResult = (int) dres;
+
+        diceRolls = rolls;
+    }
+
+    /**
+     * Creates a String result.
+     * @param result the String representation of the result.
+     */
+    private DiceExprResult(String result) {
+        this(result, DiceRolls.NO_ROLLS);
     }
 
 
@@ -105,6 +144,32 @@ public final class DiceExprResult {
         return stringResult;
     }
 
+    /**
+     * Returns the {@link DieRoll}'s that make up the value.
+     *
+     * @return the {@link DieRoll}'s that make up the value.
+     */
+    public DiceRolls getDiceRolls() {
+        return diceRolls;
+    }
+
+    /**
+     * Returns if there are any rolls that make up this result.
+     *
+     * @return <code>true</code> if the result is made of of rolls, otherwise <code>false</code>.
+     */
+    public boolean hasRolls() {
+        return diceRolls.getNumberOfRolls() > 0;
+    }
+
+    /**
+     * Returns if the value is a number.
+     *
+     * @return <code>true</code> if the result is number, <code>false</code> otherwise.
+     */
+    public boolean isNumber() {
+        return hasNumericRepresentation;
+    }
 
     /**
      * Gets a <code>DiceExprResult</code> that is for an integer value.
@@ -139,14 +204,14 @@ public final class DiceExprResult {
      * @param left the result to the left of the addition operand.
      * @param right the result to the right of the addition operand.
      * @return the result of the addition.
-     * @throws InvalidExprOperation when either <code>left</code> or <code>right</code> is {@link DiceResultType#UNDEFINED}
+     * @throws IllegalArgumentException when either <code>left</code> or <code>right</code> is {@link DiceResultType#UNDEFINED}
      */
-    public static DiceExprResult add(DiceExprResult left, DiceExprResult right) throws InvalidExprOperation {
+    public static DiceExprResult add(DiceExprResult left, DiceExprResult right) throws IllegalArgumentException {
         if (left.getType() == DiceResultType.UNDEFINED) {
-            throw new InvalidExprOperation("Left hand side of addition is undefined.");
+            throw new IllegalArgumentException("Left hand side of addition is undefined.");
         }
         if (right.getType() == DiceResultType.UNDEFINED) {
-            throw new InvalidExprOperation("Right hand side of addition is undefined.");
+            throw new IllegalArgumentException("Right hand side of addition is undefined.");
         }
 
         if (left.getType() == DiceResultType.STRING || right.getType() == DiceResultType.STRING) {
@@ -163,23 +228,23 @@ public final class DiceExprResult {
      * @param left the result to the left of the subtraction operand.
      * @param right the result to the right of the subtraction operand.
      * @return the result of the subtraction.
-     * @throws InvalidExprOperation when either <code>left</code> or <code>right</code> is
+     * @throws IllegalArgumentException when either <code>left</code> or <code>right</code> is
      *                              {@link DiceResultType#UNDEFINED} or mixing numbers and strings.
      */
-    public static DiceExprResult subtract(DiceExprResult left, DiceExprResult right) throws InvalidExprOperation {
+    public static DiceExprResult subtract(DiceExprResult left, DiceExprResult right) throws IllegalArgumentException {
         if (left.getType() == DiceResultType.UNDEFINED) {
-            throw new InvalidExprOperation("Left hand side of subtraction is undefined.");
+            throw new IllegalArgumentException("Left hand side of subtraction is undefined.");
         }
         if (right.getType() == DiceResultType.UNDEFINED) {
-            throw new InvalidExprOperation("Right hand side of subtraction is undefined.");
+            throw new IllegalArgumentException("Right hand side of subtraction is undefined.");
         }
 
         if (left.getType() == DiceResultType.STRING && right.getType() == DiceResultType.STRING) {
             return getStringResult(left.getStringResult().replace(right.getStringResult(), ""));
         } else if (left.getType() == DiceResultType.STRING) {
-            throw new InvalidExprOperation("Can not subtract a number from a string");
+            throw new IllegalArgumentException("Can not subtract a number from a string");
         } else if (right.getType() == DiceResultType.STRING) {
-            throw new InvalidExprOperation("Can not subtract a string from a number");
+            throw new IllegalArgumentException("Can not subtract a string from a number");
         } else if (left.getType() == DiceResultType.DOUBLE || right.getType() == DiceResultType.DOUBLE) {
             return getDoubleResult(left.getDoubleResult().getAsDouble() - right.getDoubleResult().getAsDouble());
         } else {
@@ -192,19 +257,19 @@ public final class DiceExprResult {
      * @param left the result to the left of the multiplication operand.
      * @param right the result to the right of the multiplication operand.
      * @return the result of the multiplication.
-     * @throws InvalidExprOperation when either <code>left</code> or <code>right</code> is
+     * @throws IllegalArgumentException when either <code>left</code> or <code>right</code> is
      *                              {@link DiceResultType#UNDEFINED} or both arguments are strings.
      */
-    public static DiceExprResult multiply(DiceExprResult left, DiceExprResult right) throws InvalidExprOperation {
+    public static DiceExprResult multiply(DiceExprResult left, DiceExprResult right) throws IllegalArgumentException {
         if (left.getType() == DiceResultType.UNDEFINED) {
-            throw new InvalidExprOperation("Left hand side of multiplication is undefined.");
+            throw new IllegalArgumentException("Left hand side of multiplication is undefined.");
         }
         if (right.getType() == DiceResultType.UNDEFINED) {
-            throw new InvalidExprOperation("Right hand side of multiplication is undefined.");
+            throw new IllegalArgumentException("Right hand side of multiplication is undefined.");
         }
 
         if (left.getType() == DiceResultType.STRING && right.getType() == DiceResultType.STRING) {
-            throw new InvalidExprOperation("You can not multiply two strings.");
+            throw new IllegalArgumentException("You can not multiply two strings.");
         } else if (left.getType() == DiceResultType.STRING || right.getType() == DiceResultType.STRING) {
             int times;
             String str;
@@ -234,23 +299,45 @@ public final class DiceExprResult {
      * @param left the result to the left of the division operand.
      * @param right the result to the right of the division operand.
      * @return the result of the division.
-     * @throws InvalidExprOperation when either <code>left</code> or <code>right</code> is
+     * @throws IllegalArgumentException when either <code>left</code> or <code>right</code> is
      *                              {@link DiceResultType#UNDEFINED} or a String.
      */
-    public static DiceExprResult divide(DiceExprResult left, DiceExprResult right) throws InvalidExprOperation {
+    public static DiceExprResult divide(DiceExprResult left, DiceExprResult right) throws IllegalArgumentException {
         if (left.getType() == DiceResultType.UNDEFINED) {
-            throw new InvalidExprOperation("Left hand side of division is undefined.");
+            throw new IllegalArgumentException("Left hand side of division is undefined.");
         }
         if (right.getType() == DiceResultType.UNDEFINED) {
-            throw new InvalidExprOperation("Right hand side of division is undefined.");
+            throw new IllegalArgumentException("Right hand side of division is undefined.");
         }
 
         if (left.getType() == DiceResultType.STRING || right.getType() == DiceResultType.STRING) {
-            throw new InvalidExprOperation("Strings can not take part in division.");
+            throw new IllegalArgumentException("Strings can not take part in division.");
         } else if (left.getType() == DiceResultType.DOUBLE || right.getType() == DiceResultType.DOUBLE) {
             return getDoubleResult(left.getDoubleResult().getAsDouble() / right.getDoubleResult().getAsDouble());
         } else {
             return getIntResult(left.getIntResult().getAsInt() / right.getIntResult().getAsInt());
+        }
+    }
+
+
+    /**
+     * Negates the passed in value.
+     * @param value the value to negate.
+     *
+     * @return the negative value of the argument.
+     * @throws IllegalArgumentException when <code>value</code> is undefined or a string.
+     */
+    public static DiceExprResult negate(DiceExprResult value) throws IllegalArgumentException {
+        if (value.getType() == DiceResultType.UNDEFINED) {
+            throw new IllegalArgumentException("Left hand side of division is undefined.");
+        }
+
+        if (value.getType() == DiceResultType.STRING) {
+            throw new IllegalArgumentException("Strings can not be negated.");
+        } else if (value.getType() == DiceResultType.DOUBLE) {
+            return getDoubleResult(value.getDoubleResult().getAsDouble() * -1.0);
+        } else {
+            return getIntResult(value.getIntResult().getAsInt() * -1);
         }
     }
 }
