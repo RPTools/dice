@@ -9,7 +9,7 @@ import java.util.Collections;
 /**
  * None that represents the grouping operator.
  */
-public class GroupDiceResultOpNode implements DiceResultNode {
+public class GroupDiceExpressionNode implements DiceExpressionNode {
 
     /**
      * Enumeration of the type of grouping.
@@ -64,14 +64,14 @@ public class GroupDiceResultOpNode implements DiceResultNode {
     /**
      * The child node for this group.
      */
-    private DiceResultNode grouped;
+    private DiceExpressionNode grouped;
 
     /**
-     * Creates a new <code>GroupDiceResultOpNode</code> object.
+     * Creates a new <code>GroupDiceExpressionNode</code> object.
      * @param type The type of grouping that it is.
      * @param grouped The node representing what this group contains.
      */
-    GroupDiceResultOpNode(GroupingType type, DiceResultNode grouped) {
+    GroupDiceExpressionNode(GroupingType type, DiceExpressionNode grouped) {
         groupingType = type;
         this.grouped = grouped;
     }
@@ -97,7 +97,7 @@ public class GroupDiceResultOpNode implements DiceResultNode {
     }
 
     @Override
-    public Collection<DiceResultNode> getChildren() {
+    public Collection<DiceExpressionNode> getChildren() {
         return Collections.singletonList(grouped);
     }
 

@@ -5,12 +5,13 @@ grammar DiceExpr;
     package net.rptools.maptool.dice;
 }
 
-diceRolls                   :   diceExpr ( ';' diceExpr)* ';'?
+diceRolls                   : diceExpr ( ';' diceExpr)* ';'?
                             ;
 
 
 diceExpr                    : assignment
                             | expr
+                            | instruction
                             ;
 
 assignment                  : variable '=' right=expr
@@ -61,6 +62,15 @@ diceSides                   : integerValue
                             ;
 
 
+instruction                 : INSTRUCTION_LEADER instructionName=WORD instructionArgumentList
+                            ;
+
+instructionArgumentList     : (instructionArgument ( ',' instructionArgument))*
+                            ;
+
+instructionArgument         : WORD
+                            ;
+
 integerValue                : INTEGER
                             ;
 
@@ -78,7 +88,6 @@ diceArgument                : name=WORD ( op=( '<' | '>' | '<=' | '>=' | '=' ) v
 
 
 
-
 INTEGER                     : DIGIT+;
 DOUBLE                      : DIGIT+ '.' DIGIT+;
 
@@ -87,6 +96,7 @@ WORD                        : LETTER+;
 STRING                      : SINGLE_QUOTE (SINGLE_STRING_ESC | ~['\\])* SINGLE_QUOTE
                             | DOUBLE_QUOTE (DOUBLE_STRING_ESC | ~["\\])* DOUBLE_QUOTE ;
 
+INSTRUCTION_LEADER          : '%';
 
 
 LOCAL_VARIABLE              : LOCAL_VAR_LEADER LETTER ( DIGIT | LETTER )*;
@@ -96,6 +106,7 @@ PROPERTY_VARIABLE           : PROPERTY_VAR_LEADER LETTER ( DIGIT | LETTER )*
                             | PROPERTY_VAR_LEADER STRING
                             ;
 
+MULTIlINE_COMMENT           : '/*' .*? '*/' -> skip;
 
 WS                          : [ \t\r\n] -> skip;
 
@@ -105,8 +116,10 @@ fragment SINGLE_QUOTE       : '\'';
 fragment DOUBLE_QUOTE       : '"';
 fragment LETTER             : [a-zA-Z];
 fragment LOCAL_VAR_LEADER   : '$';
-fragment GLOBAL_VAR_LEADER  : '%';
+fragment GLOBAL_VAR_LEADER  : '#';
 fragment PROPERTY_VAR_LEADER: '@';
+
+
 
 fragment SINGLE_STRING_ESC  : '\\' (STRING_ESC | SINGLE_QUOTE);
 fragment DOUBLE_STRING_ESC  : '\\' (STRING_ESC | DOUBLE_QUOTE);

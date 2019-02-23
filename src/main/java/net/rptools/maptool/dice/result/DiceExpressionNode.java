@@ -8,7 +8,7 @@ import java.util.Collection;
 /**
  * Nodes used to represent different roll expressions during parsing and execution.
  */
-public interface DiceResultNode {
+public interface DiceExpressionNode {
 
 
     /**
@@ -38,6 +38,6 @@ public interface DiceResultNode {
      * Returns the children of this node.
      * @return the children of this code.
      */
-    Collection<DiceResultNode> getChildren();
+    Collection<DiceExpressionNode> getChildren();
 
 }

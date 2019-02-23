@@ -1,6 +1,5 @@
 package net.rptools.maptool.dice.result;
 
-import net.rptools.maptool.dice.InvalidExprOperation;
 import net.rptools.maptool.dice.symbols.DiceExpressionSymbolTable;
 
 import java.util.Collection;
@@ -9,7 +8,7 @@ import java.util.Collections;
 /**
  * Note which represents a value expression
  */
-public class ValueDiceResultOpNode implements DiceResultNode {
+public class ValueDiceExpressionNode implements DiceExpressionNode {
 
     /** The value that this object represents. */
     final private DiceExprResult value;
@@ -18,7 +17,7 @@ public class ValueDiceResultOpNode implements DiceResultNode {
      * Creates an integer value.
      * @param value the integer.
      */
-    ValueDiceResultOpNode(int value) {
+    ValueDiceExpressionNode(int value) {
         this.value = DiceExprResult.getIntResult(value);
     }
 
@@ -26,7 +25,7 @@ public class ValueDiceResultOpNode implements DiceResultNode {
      * Creates a double value.
      * @param value the doulbe.
      */
-    ValueDiceResultOpNode(double value) {
+    ValueDiceExpressionNode(double value) {
         this.value = DiceExprResult.getDoubleResult(value);
     }
 
@@ -34,7 +33,7 @@ public class ValueDiceResultOpNode implements DiceResultNode {
      * Creates a String value.
      * @param value the String.
      */
-    ValueDiceResultOpNode(String value) {
+    ValueDiceExpressionNode(String value) {
         this.value = DiceExprResult.getStringResult(value);
     }
 
@@ -56,7 +55,7 @@ public class ValueDiceResultOpNode implements DiceResultNode {
     }
 
     @Override
-    public Collection<DiceResultNode> getChildren() {
+    public Collection<DiceExpressionNode> getChildren() {
         return Collections.emptyList();
     }
 

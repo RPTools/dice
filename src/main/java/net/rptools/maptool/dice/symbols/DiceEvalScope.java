@@ -8,7 +8,7 @@ public enum DiceEvalScope {
     /** Local scope, soon forgotten. */
     LOCAL("local", "$"),
     /** Global scope, used for updating/reading flags. */
-    GLOBAL("global", "%"),
+    GLOBAL("global", "#"),
     /** Property scope, used for reading the property of the current token. */
     PROPERTY("property", "@");
 

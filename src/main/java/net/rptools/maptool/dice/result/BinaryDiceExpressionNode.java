@@ -8,7 +8,7 @@ import java.util.Collection;
 /**
  * Node that represents a binary operation in the dice roll script.
  */
-public class BinaryDiceResultOpNode implements  DiceResultNode {
+public class BinaryDiceExpressionNode implements DiceExpressionNode {
 
 
     /** The operator that this represents. */
@@ -19,10 +19,10 @@ public class BinaryDiceResultOpNode implements  DiceResultNode {
     private DiceExprResult diceExprResult;
 
     /** The node representing what is on the left of the operator. */
-    private final DiceResultNode left;
+    private final DiceExpressionNode left;
 
     /** The node representing what is on the right of the operator. */
-    private final  DiceResultNode right;
+    private final DiceExpressionNode right;
 
 
     /**
@@ -31,7 +31,7 @@ public class BinaryDiceResultOpNode implements  DiceResultNode {
      * @param left What is to the left of the operator.
      * @param right What is to the right of the operator.
      */
-    BinaryDiceResultOpNode(String op, DiceResultNode left, DiceResultNode right ) {
+    BinaryDiceExpressionNode(String op, DiceExpressionNode left, DiceExpressionNode right ) {
         operator = op;
         this.left = left;
         this.right = right;
@@ -48,8 +48,8 @@ public class BinaryDiceResultOpNode implements  DiceResultNode {
     }
 
     @Override
-    public Collection<DiceResultNode> getChildren() {
-        return Arrays.asList(new DiceResultNode[] { left, right });
+    public Collection<DiceExpressionNode> getChildren() {
+        return Arrays.asList(new DiceExpressionNode[] { left, right });
     }
 
 

@@ -8,7 +8,7 @@ import java.util.Collections;
 /**
  * Node that represents a unary operation in the dice roll script.
  */
-public class UnaryDiceResultOpNode implements  DiceResultNode {
+public class UnaryDiceExpressionNode implements DiceExpressionNode {
 
 
     /** The operator that this represents. */
@@ -19,7 +19,7 @@ public class UnaryDiceResultOpNode implements  DiceResultNode {
     private DiceExprResult diceExprResult;
 
     /** The node representing the operand. */
-    private final DiceResultNode operand;
+    private final DiceExpressionNode operand;
 
 
     /** The evaluated value of this node. */
@@ -31,7 +31,7 @@ public class UnaryDiceResultOpNode implements  DiceResultNode {
      * @param op The unary operator to represent.
      * @param operand The operand for this operator.
      */
-    UnaryDiceResultOpNode(String op, DiceResultNode operand) {
+    UnaryDiceExpressionNode(String op, DiceExpressionNode operand) {
         operator = op;
         this.operand = operand;
     }
@@ -47,7 +47,7 @@ public class UnaryDiceResultOpNode implements  DiceResultNode {
     }
 
     @Override
-    public Collection<DiceResultNode> getChildren() {
+    public Collection<DiceExpressionNode> getChildren() {
         return Collections.singletonList(operand);
     }
 

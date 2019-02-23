@@ -42,7 +42,7 @@ public class DieRoll {
      * @param value The value rolled.
      */
     public DieRoll(int value) {
-        this(value, Collections.EMPTY_LIST);
+        this(value, Collections.emptyList());
     }
 
 

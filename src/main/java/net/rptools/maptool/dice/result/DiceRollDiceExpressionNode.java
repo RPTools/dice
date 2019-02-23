@@ -14,14 +14,14 @@ import java.util.stream.Collectors;
 /**
  * None that represents rolling of dice
  */
-public class DiceDiceResultOpNode  implements DiceResultNode{
+public class DiceRollDiceExpressionNode implements DiceExpressionNode {
 
 
     /** the number of sides on the dice. **/
-    private final DiceResultNode numberOfSides;
+    private final DiceExpressionNode numberOfSides;
 
     /** The number of dice to roll. */
-    private final DiceResultNode numberOfDice;
+    private final DiceExpressionNode numberOfDice;
 
     /** The name of the dice. */
     private final String diceName;
@@ -44,7 +44,7 @@ public class DiceDiceResultOpNode  implements DiceResultNode{
      * @param args The arguments to the dice roll.
      * @param str The dice roll string..
      */
-    DiceDiceResultOpNode(String name, DiceResultNode numDice, DiceResultNode numSides, Collection<DiceRollerArgument> args, String str) {
+    DiceRollDiceExpressionNode(String name, DiceExpressionNode numDice, DiceExpressionNode numSides, Collection<DiceRollerArgument> args, String str) {
         diceName = name;
         rollerArguments = List.copyOf(args);
         diceString = str;
@@ -109,8 +109,8 @@ public class DiceDiceResultOpNode  implements DiceResultNode{
     }
 
     @Override
-    public Collection<DiceResultNode> getChildren() {
-        return Arrays.asList(new DiceResultNode[] { numberOfDice, numberOfDice });
+    public Collection<DiceExpressionNode> getChildren() {
+        return Arrays.asList(new DiceExpressionNode[] { numberOfDice, numberOfDice });
     }
 
     /**

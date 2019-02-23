@@ -7,9 +7,9 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
- * Represents the node used to resolve a symbol from the symbol table.
+ * Represents the node used to assign a value to a symbol.
  */
-public class ResolveSymbolDiceResultOpNode implements  DiceResultNode {
+public class AssignmentDiceExpressionNode implements DiceExpressionNode {
 
 
     /** The name of the symbol. */
@@ -18,22 +18,30 @@ public class ResolveSymbolDiceResultOpNode implements  DiceResultNode {
     /** The scope of the symbol. */
     private final DiceEvalScope scope;
 
+
+    /** The right hand side of the assignment expression. */
+    private final DiceExpressionNode rhs;
+
+
     /** The evaluated value of this node. */
     private DiceExprResult result;
 
     /**
-     * Creates a new node used to resolve a symbol from the symbol table.
+     * Creates a new node used to assign a value to a symbol.
      * @param symbol The name of the symbol.
      * @param symbolScope The scope of the symbol.
+     * @param rhs The right hand side of the assignment.
      */
-    public ResolveSymbolDiceResultOpNode(String symbol, DiceEvalScope symbolScope) {
+    public AssignmentDiceExpressionNode(String symbol, DiceEvalScope symbolScope, DiceExpressionNode rhs) {
         name = symbol;
         scope = symbolScope;
+        this.rhs = rhs;
     }
 
     @Override
     public DiceExprResult evaluate(DiceExpressionSymbolTable symbolTable) throws UnsupportedOperationException {
-        result = symbolTable.getVariableValue(scope, name);
+        result = rhs.evaluate(symbolTable);
+        symbolTable.setVariableValue(scope, name, result);
         return result;
     }
 
@@ -44,16 +52,13 @@ public class ResolveSymbolDiceResultOpNode implements  DiceResultNode {
 
     @Override
     public String getFormattedText() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("<span data-").append(scope.getScopeName()).append("=").append('"').append(scope.getScopePrefix()).
-                append('"').append(">").append(getExprResult().getStringResult()).append("</span>");
-
-        return sb.toString();
+        System.out.println("############ " + name);
+        return name + " = " + rhs.getFormattedText();
     }
 
     @Override
-    public Collection<DiceResultNode> getChildren() {
-        return Collections.emptyList();
+    public Collection<DiceExpressionNode> getChildren() {
+        return Collections.singletonList(rhs);
     }
 
 }
