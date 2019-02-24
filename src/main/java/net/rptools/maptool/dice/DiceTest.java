@@ -1,5 +1,6 @@
 package net.rptools.maptool.dice;
 
+import net.rptools.maptool.dice.result.PlainResultFormatter;
 import net.rptools.maptool.dice.symbols.DefaultDiceExpressionSymbolTable;
 import net.rptools.maptool.dice.symbols.DiceEvalScope;
 
@@ -27,14 +28,15 @@ public class DiceTest {
         }
 
 
-
         /*System.out.println();
         System.out.println();
-        System.out.println(tree.toStringTree(parser));
+        System.out.println(expressiontree.toStringTree(parser));
         System.out.println();*/
 
 
         diceExpression.execute(symbolTable);
+        diceExpression.format(new PlainResultFormatter()).ifPresent(System.out::println);
+        //System.out.println(diceExpression.format(new PlainResultFormatter()));
 
 
         System.out.println("Local Variables");

@@ -1,10 +1,6 @@
-package net.rptools.maptool.dice.result;
+package net.rptools.maptool.dice;
 
-import net.rptools.maptool.dice.DiceArgumentVisitor;
-import net.rptools.maptool.dice.DiceExprBaseVisitor;
-import net.rptools.maptool.dice.DiceExprParser;
-import net.rptools.maptool.dice.InstructionArgumentVisitor;
-import net.rptools.maptool.dice.result.tree.*;
+import net.rptools.maptool.dice.expressiontree.*;
 import net.rptools.maptool.dice.roller.DiceRollerArgument;
 import net.rptools.maptool.dice.symbols.DiceEvalScope;
 
@@ -28,7 +24,7 @@ public class DiceRollVisitor extends DiceExprBaseVisitor<DiceExpressionNode> {
 
     @Override
     public DiceExpressionNode visitDiceRolls(DiceExprParser.DiceRollsContext ctx) {
-        ctx.diceExpr().stream().forEach(de -> roots.add(visit(de)));
+        ctx.diceExprTopLevel().stream().forEach(de -> roots.add(visit(de)));
         return roots.get(roots.size() - 1);
     }
 
@@ -169,5 +165,10 @@ public class DiceRollVisitor extends DiceExprBaseVisitor<DiceExpressionNode> {
         }
 
         return new InstructionDiceExpressionNode(instrName, argList);
+    }
+
+    @Override
+    public DiceExpressionNode visitDiceExprTopLevel(DiceExprParser.DiceExprTopLevelContext ctx) {
+        return new TopLevelExpressionNode(ctx.getText(), visit(ctx.getChild(0)));
     }
 }

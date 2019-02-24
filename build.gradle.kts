@@ -13,7 +13,7 @@ repositories {
 
 dependencies {
     antlr("org.antlr:antlr4:4.7.2")
-    testCompile("junit", "junit", "4.12")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.4.0")
     compile("org.reflections", "reflections", "0.9.11")
     compile("org.apache.commons", "commons-text", "1.6")
 
@@ -40,6 +40,13 @@ tasks.jar {
                 "Implementation-Version" to version,
                 "Main-Class" to "net.rptools.maptool.dice.DiceTest"
         )
+    }
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
     }
 }
 

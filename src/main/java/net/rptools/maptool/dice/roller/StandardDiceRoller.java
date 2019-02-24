@@ -39,6 +39,6 @@ public class StandardDiceRoller implements DiceRoller {
             dieRolls.add(new DieRoll(val));
         }
 
-        return new DiceExprResult(sum, new DiceRolls(dieRolls));
+        return new DiceExprResult(sum, new DiceRolls(dieRolls, numSides, DiceExprResult.getIntResult(sum), pattern));
     }
 }

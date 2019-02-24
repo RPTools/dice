@@ -1,7 +1,6 @@
-package net.rptools.maptool.dice.result.tree;
+package net.rptools.maptool.dice.expressiontree;
 
 import net.rptools.maptool.dice.result.DiceExprResult;
-import net.rptools.maptool.dice.result.tree.DiceExpressionNode;
 import net.rptools.maptool.dice.symbols.DiceExpressionSymbolTable;
 
 import java.util.Collection;
@@ -41,11 +40,6 @@ public class UnaryDiceExpressionNode implements DiceExpressionNode {
     @Override
     public DiceExprResult getExprResult() {
         return diceExprResult;
-    }
-
-    @Override
-    public String getFormattedText() {
-        return operator + " " + operand.getFormattedText();
     }
 
     @Override

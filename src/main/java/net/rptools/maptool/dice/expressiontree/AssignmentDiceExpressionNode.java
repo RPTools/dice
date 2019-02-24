@@ -1,4 +1,4 @@
-package net.rptools.maptool.dice.result.tree;
+package net.rptools.maptool.dice.expressiontree;
 
 import net.rptools.maptool.dice.result.DiceExprResult;
 import net.rptools.maptool.dice.symbols.DiceEvalScope;
@@ -52,14 +52,20 @@ public class AssignmentDiceExpressionNode implements DiceExpressionNode {
     }
 
     @Override
-    public String getFormattedText() {
-        System.out.println("############ " + name);
-        return name + " = " + rhs.getFormattedText();
-    }
-
-    @Override
     public Collection<DiceExpressionNode> getChildren() {
         return Collections.singletonList(rhs);
+    }
+
+    String getName() {
+        return name;
+    }
+
+    String getVariableName() {
+        return getScope().getScopePrefix() + getName();
+    }
+
+    DiceEvalScope getScope() {
+        return scope;
     }
 
 }

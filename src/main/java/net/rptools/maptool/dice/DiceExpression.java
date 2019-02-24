@@ -1,8 +1,8 @@
 package net.rptools.maptool.dice;
 
-import net.rptools.maptool.dice.result.DiceExpressionNode;
-import net.rptools.maptool.dice.result.DiceRollVisitor;
-import net.rptools.maptool.dice.symbols.DefaultDiceExpressionSymbolTable;
+import net.rptools.maptool.dice.expressiontree.DiceExpressionNode;
+import net.rptools.maptool.dice.expressiontree.ResultDetails;
+import net.rptools.maptool.dice.result.ResultFormatter;
 import net.rptools.maptool.dice.symbols.DiceExpressionSymbolTable;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -13,6 +13,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 
 public class DiceExpression {
 
@@ -32,7 +33,7 @@ public class DiceExpression {
 
         ParseTree parseTree = parser.diceRolls();
 
-        // Create a generic parse tree walker that can trigger callbacks
+        // Create a generic parse expressiontree walker that can trigger callbacks
         ParseTreeWalker walker = new ParseTreeWalker();
 
         visitor = new DiceRollVisitor();
@@ -61,4 +62,8 @@ public class DiceExpression {
         }
     }
 
+    public Optional<String> format(ResultFormatter formatter) {
+        var results = new ResultDetails();
+        return results.format(roots, formatter);
+    }
 }

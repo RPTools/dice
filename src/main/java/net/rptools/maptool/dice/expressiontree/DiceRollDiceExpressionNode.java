@@ -1,12 +1,10 @@
-package net.rptools.maptool.dice.result.tree;
+package net.rptools.maptool.dice.expressiontree;
 
 import net.rptools.maptool.dice.result.DiceExprResult;
 import net.rptools.maptool.dice.result.DiceRolls;
-import net.rptools.maptool.dice.result.tree.DiceExpressionNode;
 import net.rptools.maptool.dice.roller.DiceRollerArgument;
 import net.rptools.maptool.dice.roller.DiceRollers;
 import net.rptools.maptool.dice.symbols.DiceExpressionSymbolTable;
-import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -35,9 +33,10 @@ public class DiceRollDiceExpressionNode implements DiceExpressionNode {
     /** The arguments to the dice roller. */
     private final List<DiceRollerArgument> rollerArguments;
 
-
     /** The result of evaluating the expression. */
     private DiceExprResult result;
+
+
 
     /**
      * Create a node to hold a dice roll.
@@ -69,51 +68,8 @@ public class DiceRollDiceExpressionNode implements DiceExpressionNode {
     }
 
     @Override
-    public String getFormattedText() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("<span class=\"rollresult");
-        int numCriticals = result.getDiceRolls().getCriticals();
-        int numFumbles = result.getDiceRolls().getFumbles();
-        int numSuccess = result.getDiceRolls().getSuccesses();
-        int numFailures = result.getDiceRolls().getFailures();
-        if (numCriticals > 0) {
-            sb.append(" criticalroll");
-        }
-
-        if (numFumbles > 0) {
-            sb.append(" fumbleroll");
-        }
-
-        sb.append('"');
-
-        if (numSuccess > 0) {
-            sb.append(" data-successes=").append('"').append(numSuccess).append('"');
-        }
-
-        if (numFailures > 0) {
-            sb.append(" data-failures=").append('"').append(numFailures).append('"');
-        }
-
-        sb.append(" data-dice=").append('"').append(diceString).append('"');
-        sb.append(" data-rolls=\"");
-
-        sb.append(result.getDiceRolls().getDiceRolls().stream().map(r -> Integer.toString(r.getValue())).collect(Collectors.joining(",")));
-
-        sb.append("\"");
-
-        sb.append(" data-numRolls=").append('"').append(result.getDiceRolls().getNumberOfRolls()).append('"');
-        sb.append(" data-result=").append('"').append(result.getStringResult()).append('"');
-
-        sb.append(" data-rolldetails=").append('"').append(StringEscapeUtils.escapeHtml4(formatRolls(result.getDiceRolls())));
-
-        sb.append(">").append(result.getStringResult()).append("</span>");
-
-        return sb.toString();
-    }
-
-    @Override
     public Collection<DiceExpressionNode> getChildren() {
-        return Arrays.asList(new DiceExpressionNode[] { numberOfDice, numberOfDice });
+        return Arrays.asList(new DiceExpressionNode[] { numberOfDice, numberOfSides });
     }
 
     /**

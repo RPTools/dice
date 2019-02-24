@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Visitor used to visit dice expression arguments in the parse tree.
+ * Visitor used to visit dice expression arguments in the parse expressiontree.
  */
 public class DiceArgumentVisitor extends DiceExprBaseVisitor<List<DiceRollerArgument>> {
 

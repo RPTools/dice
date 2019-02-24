@@ -5,14 +5,17 @@ grammar DiceExpr;
     package net.rptools.maptool.dice;
 }
 
-diceRolls                   : diceExpr ( ';' diceExpr)* ';'?
+diceRolls                   : diceExprTopLevel ( ';' diceExprTopLevel)* ';'?
                             ;
 
+diceExprTopLevel            : diceExpr
+                            ;
 
 diceExpr                    : assignment
                             | expr
                             | instruction
                             ;
+
 
 assignment                  : variable '=' right=expr
                             ;

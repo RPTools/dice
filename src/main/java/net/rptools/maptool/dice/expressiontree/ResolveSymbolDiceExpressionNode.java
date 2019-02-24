@@ -1,7 +1,6 @@
-package net.rptools.maptool.dice.result.tree;
+package net.rptools.maptool.dice.expressiontree;
 
 import net.rptools.maptool.dice.result.DiceExprResult;
-import net.rptools.maptool.dice.result.tree.DiceExpressionNode;
 import net.rptools.maptool.dice.symbols.DiceEvalScope;
 import net.rptools.maptool.dice.symbols.DiceExpressionSymbolTable;
 
@@ -45,17 +44,19 @@ public class ResolveSymbolDiceExpressionNode implements DiceExpressionNode {
     }
 
     @Override
-    public String getFormattedText() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("<span data-").append(scope.getScopeName()).append("=").append('"').append(scope.getScopePrefix()).
-                append('"').append(">").append(getExprResult().getStringResult()).append("</span>");
-
-        return sb.toString();
-    }
-
-    @Override
     public Collection<DiceExpressionNode> getChildren() {
         return Collections.emptyList();
     }
 
+    String getName() {
+        return name;
+    }
+
+    DiceEvalScope getScope() {
+        return scope;
+    }
+
+    String getVariableName() {
+        return getScope().getScopePrefix() + getName();
+    }
 }

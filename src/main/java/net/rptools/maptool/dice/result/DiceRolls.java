@@ -29,16 +29,31 @@ public class DiceRolls {
     /** The number of rolls performed. */
     private final int numberOfRolls;
 
+    /** The number of sides for the dice. */
+    private final int numberOfSides;
+
+    /** The end result of the dice roll. */
+    private final DiceExprResult result;
+
+
+    /** Dice roll name. */
+    private final String name;
+
+
+
 
     /** No dice were rolled in the create of this value. */
-    public static DiceRolls NO_ROLLS = new DiceRolls(Collections.emptyList());
+    public static DiceRolls NO_ROLLS = new DiceRolls(Collections.emptyList(), 0,  DiceExprResult.getIntResult(0), "none");
 
     /**
      * Creates a new <code>DiceRolls</code> to hold a collection of {@link DieRoll}s.
      * @param rolls the {@link DieRoll}s.
      */
-    public DiceRolls(Collection<DieRoll> rolls) {
+    public DiceRolls(Collection<DieRoll> rolls, int sides, DiceExprResult res, String rollName) {
+        numberOfSides = sides;
+        result = res;
         diceRolls = List.copyOf(rolls);
+        name = rollName;
 
         int numSuccess = 0;
         int numFail = 0;
@@ -118,5 +133,29 @@ public class DiceRolls {
      */
     public int getNumberOfRolls() {
         return numberOfRolls;
+    }
+
+    /**
+     * Returns the number of sides for the dice rolled.
+     * @return the number of sides for the dice rolled.
+     */
+    public int getNumberOfSides() {
+        return numberOfSides;
+    }
+
+    /**
+     * Returns the end result of the dice rolls.
+     * @return the end result of the dice rolls.
+     */
+    public DiceExprResult getResult() {
+        return result;
+    }
+
+    /**
+     * Returns the name of the dice that were rolled.
+     * @return the name of the dice that were rolled.
+     */
+    public String getName() {
+        return name;
     }
 }

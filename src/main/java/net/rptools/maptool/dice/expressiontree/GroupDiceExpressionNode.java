@@ -1,8 +1,7 @@
-package net.rptools.maptool.dice.result.tree;
+package net.rptools.maptool.dice.expressiontree;
 
 
 import net.rptools.maptool.dice.result.DiceExprResult;
-import net.rptools.maptool.dice.result.tree.DiceExpressionNode;
 import net.rptools.maptool.dice.symbols.DiceExpressionSymbolTable;
 
 import java.util.Collection;
@@ -87,15 +86,6 @@ public class GroupDiceExpressionNode implements DiceExpressionNode {
     @Override
     public DiceExprResult getExprResult() {
         return result;
-    }
-
-    @Override
-    public String getFormattedText() {
-        if (groupingType == GroupingType.PAREN) {
-            return "(" + grouped.getFormattedText() + ")";
-        } else {
-            return "{" + grouped.getFormattedText() + "}";
-        }
     }
 
     @Override

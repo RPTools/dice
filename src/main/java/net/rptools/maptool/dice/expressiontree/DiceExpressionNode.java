@@ -1,4 +1,4 @@
-package net.rptools.maptool.dice.result.tree;
+package net.rptools.maptool.dice.expressiontree;
 
 
 import net.rptools.maptool.dice.result.DiceExprResult;
@@ -28,12 +28,6 @@ public interface DiceExpressionNode {
      * @return the result of the evaluation.
      */
     DiceExprResult getExprResult();
-
-    /**
-     * Returns the result as formatted text.
-     * @return the result as formatted text.
-     */
-    String getFormattedText();
 
     /**
      * Returns the children of this node.

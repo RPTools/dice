@@ -1,7 +1,6 @@
-package net.rptools.maptool.dice.result.tree;
+package net.rptools.maptool.dice.expressiontree;
 
 import net.rptools.maptool.dice.result.DiceExprResult;
-import net.rptools.maptool.dice.result.tree.DiceExpressionNode;
 import net.rptools.maptool.dice.symbols.DiceExpressionSymbolTable;
 
 import java.util.Collection;
@@ -30,12 +29,16 @@ public class InstructionDiceExpressionNode implements DiceExpressionNode {
     }
 
     @Override
-    public String getFormattedText() {
-        return "";
-    }
-
-    @Override
     public Collection<DiceExpressionNode> getChildren() {
         return Collections.emptyList();
+    }
+
+
+    String getInstructionName() {
+        return instructionName;
+    }
+
+    List<String> getArguments() {
+        return arguments;
     }
 }
