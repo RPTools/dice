@@ -1,6 +1,7 @@
 .gradle/
 build/
 /bin/
+.gradletasknamecache
 
 # OS generated files
 ################################################################################

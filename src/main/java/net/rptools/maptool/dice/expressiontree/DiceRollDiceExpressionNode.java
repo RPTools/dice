@@ -1,5 +1,8 @@
-package net.rptools.maptool.dice.result;
+package net.rptools.maptool.dice.result.tree;
 
+import net.rptools.maptool.dice.result.DiceExprResult;
+import net.rptools.maptool.dice.result.DiceRolls;
+import net.rptools.maptool.dice.result.tree.DiceExpressionNode;
 import net.rptools.maptool.dice.roller.DiceRollerArgument;
 import net.rptools.maptool.dice.roller.DiceRollers;
 import net.rptools.maptool.dice.symbols.DiceExpressionSymbolTable;
@@ -44,7 +47,7 @@ public class DiceRollDiceExpressionNode implements DiceExpressionNode {
      * @param args The arguments to the dice roll.
      * @param str The dice roll string..
      */
-    DiceRollDiceExpressionNode(String name, DiceExpressionNode numDice, DiceExpressionNode numSides, Collection<DiceRollerArgument> args, String str) {
+    public DiceRollDiceExpressionNode(String name, DiceExpressionNode numDice, DiceExpressionNode numSides, Collection<DiceRollerArgument> args, String str) {
         diceName = name;
         rollerArguments = List.copyOf(args);
         diceString = str;

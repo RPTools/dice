@@ -1,6 +1,8 @@
-package net.rptools.maptool.dice.result;
+package net.rptools.maptool.dice.result.tree;
 
 
+import net.rptools.maptool.dice.result.DiceExprResult;
+import net.rptools.maptool.dice.result.tree.DiceExpressionNode;
 import net.rptools.maptool.dice.symbols.DiceExpressionSymbolTable;
 
 import java.util.Collection;
@@ -71,7 +73,7 @@ public class GroupDiceExpressionNode implements DiceExpressionNode {
      * @param type The type of grouping that it is.
      * @param grouped The node representing what this group contains.
      */
-    GroupDiceExpressionNode(GroupingType type, DiceExpressionNode grouped) {
+    public GroupDiceExpressionNode(GroupingType type, DiceExpressionNode grouped) {
         groupingType = type;
         this.grouped = grouped;
     }

@@ -1,6 +1,7 @@
-package net.rptools.maptool.dice.result;
+package net.rptools.maptool.dice.result.tree;
 
 
+import net.rptools.maptool.dice.result.DiceExprResult;
 import net.rptools.maptool.dice.symbols.DiceExpressionSymbolTable;
 
 import java.util.Collection;

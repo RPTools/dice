@@ -1,5 +1,7 @@
-package net.rptools.maptool.dice.result;
+package net.rptools.maptool.dice.result.tree;
 
+import net.rptools.maptool.dice.result.DiceExprResult;
+import net.rptools.maptool.dice.result.tree.DiceExpressionNode;
 import net.rptools.maptool.dice.symbols.DiceExpressionSymbolTable;
 
 import java.util.Collection;
@@ -12,7 +14,7 @@ public class InstructionDiceExpressionNode implements DiceExpressionNode {
 
     private final List<String> arguments;
 
-    InstructionDiceExpressionNode(String name, Collection<String> args) {
+    public InstructionDiceExpressionNode(String name, Collection<String> args) {
         instructionName = name;
         arguments = List.copyOf(args);
     }

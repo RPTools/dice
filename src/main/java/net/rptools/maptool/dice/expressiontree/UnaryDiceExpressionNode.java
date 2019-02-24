@@ -1,5 +1,7 @@
-package net.rptools.maptool.dice.result;
+package net.rptools.maptool.dice.result.tree;
 
+import net.rptools.maptool.dice.result.DiceExprResult;
+import net.rptools.maptool.dice.result.tree.DiceExpressionNode;
 import net.rptools.maptool.dice.symbols.DiceExpressionSymbolTable;
 
 import java.util.Collection;
@@ -31,7 +33,7 @@ public class UnaryDiceExpressionNode implements DiceExpressionNode {
      * @param op The unary operator to represent.
      * @param operand The operand for this operator.
      */
-    UnaryDiceExpressionNode(String op, DiceExpressionNode operand) {
+    public UnaryDiceExpressionNode(String op, DiceExpressionNode operand) {
         operator = op;
         this.operand = operand;
     }

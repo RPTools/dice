@@ -4,6 +4,7 @@ import net.rptools.maptool.dice.DiceArgumentVisitor;
 import net.rptools.maptool.dice.DiceExprBaseVisitor;
 import net.rptools.maptool.dice.DiceExprParser;
 import net.rptools.maptool.dice.InstructionArgumentVisitor;
+import net.rptools.maptool.dice.result.tree.*;
 import net.rptools.maptool.dice.roller.DiceRollerArgument;
 import net.rptools.maptool.dice.symbols.DiceEvalScope;
 

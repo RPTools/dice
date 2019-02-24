@@ -1,5 +1,6 @@
-package net.rptools.maptool.dice.result;
+package net.rptools.maptool.dice.result.tree;
 
+import net.rptools.maptool.dice.result.DiceExprResult;
 import net.rptools.maptool.dice.symbols.DiceExpressionSymbolTable;
 
 import java.util.Arrays;
@@ -31,7 +32,7 @@ public class BinaryDiceExpressionNode implements DiceExpressionNode {
      * @param left What is to the left of the operator.
      * @param right What is to the right of the operator.
      */
-    BinaryDiceExpressionNode(String op, DiceExpressionNode left, DiceExpressionNode right ) {
+    public BinaryDiceExpressionNode(String op, DiceExpressionNode left, DiceExpressionNode right ) {
         operator = op;
         this.left = left;
         this.right = right;

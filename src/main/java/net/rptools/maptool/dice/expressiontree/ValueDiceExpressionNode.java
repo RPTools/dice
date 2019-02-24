@@ -1,5 +1,7 @@
-package net.rptools.maptool.dice.result;
+package net.rptools.maptool.dice.result.tree;
 
+import net.rptools.maptool.dice.result.DiceExprResult;
+import net.rptools.maptool.dice.result.tree.DiceExpressionNode;
 import net.rptools.maptool.dice.symbols.DiceExpressionSymbolTable;
 
 import java.util.Collection;
@@ -17,7 +19,7 @@ public class ValueDiceExpressionNode implements DiceExpressionNode {
      * Creates an integer value.
      * @param value the integer.
      */
-    ValueDiceExpressionNode(int value) {
+    public ValueDiceExpressionNode(int value) {
         this.value = DiceExprResult.getIntResult(value);
     }
 
@@ -25,7 +27,7 @@ public class ValueDiceExpressionNode implements DiceExpressionNode {
      * Creates a double value.
      * @param value the doulbe.
      */
-    ValueDiceExpressionNode(double value) {
+    public ValueDiceExpressionNode(double value) {
         this.value = DiceExprResult.getDoubleResult(value);
     }
 
@@ -33,7 +35,7 @@ public class ValueDiceExpressionNode implements DiceExpressionNode {
      * Creates a String value.
      * @param value the String.
      */
-    ValueDiceExpressionNode(String value) {
+    public ValueDiceExpressionNode(String value) {
         this.value = DiceExprResult.getStringResult(value);
     }
 
