@@ -97,7 +97,7 @@ public class DiceRollDiceExpressionNode implements DiceExpressionNode {
                 sb.append(" successRoll");
             }
 
-            if (dr.isFailue()) {
+            if (dr.isFailure()) {
                 sb.append(" failureRoll");
             }
 

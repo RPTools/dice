@@ -14,11 +14,15 @@ public class DieRoll {
      * The different types of flags for a die roll.
      */
     public enum DieRollFlags {
+        /** The roll is a critical fumble. */
         FUMBLE,
+        /** The roll is a failure. */
         FAILURE,
+        /** The roll is a success. */
         SUCCESS,
+        /** The roll is a critical. */
         CRITICAL
-    };
+    }
 
     /** The value of the roll. */
     private final int value;
@@ -76,7 +80,7 @@ public class DieRoll {
      *
      * @return <code>true</code> if it was a failure.
      */
-    public boolean isFailue() {
+    public boolean isFailure() {
         return flags.contains(DieRollFlags.FAILURE);
     }
 

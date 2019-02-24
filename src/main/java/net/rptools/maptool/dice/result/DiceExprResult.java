@@ -28,6 +28,18 @@ public final class DiceExprResult {
     /** The dice rolls if any that go to make up this result. */
     private final DiceRolls diceRolls;
 
+    /**
+     * Create a DiceExpressionResult of type undefined.
+     */
+    private DiceExprResult() {
+        type = DiceResultType.UNDEFINED;
+        intResult = 0;
+        doubleResult = 0.0;
+        hasNumericRepresentation = false;
+        stringResult = null;
+        diceRolls = DiceRolls.NO_ROLLS;
+    }
+
 
     /**
      * Creates an Integer result.
@@ -110,6 +122,8 @@ public final class DiceExprResult {
     }
 
 
+    /** Undefined <code>DiceExprResult</code>. */
+    public static DiceExprResult UNDEFINED = new DiceExprResult();
 
 
     /**

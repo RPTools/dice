@@ -65,7 +65,7 @@ public class DiceRolls {
                 numFumble++;
             }
 
-            if (d.isFailue()) {
+            if (d.isFailure()) {
                 numFail++;
             }
 
