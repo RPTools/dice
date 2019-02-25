@@ -79,7 +79,7 @@ public class DiceRollDiceExpressionNode implements DiceExpressionNode {
      */
     private String formatRolls(DiceRolls diceRolls) {
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         LinkedList<String> rolls = new LinkedList<>();
 
         for (var dr : diceRolls.getDiceRolls()) {

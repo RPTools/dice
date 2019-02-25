@@ -43,6 +43,7 @@ public class DiceRolls {
 
 
     /** No dice were rolled in the create of this value. */
+    @SuppressWarnings("WeakerAccess")
     public static DiceRolls NO_ROLLS = new DiceRolls(Collections.emptyList(), 0,  DiceExprResult.getIntResult(0), "none");
 
     /**
@@ -99,6 +100,7 @@ public class DiceRolls {
      * Returns the number of successes recorded in the rolls.
      * @return the number of successs recorded.
      */
+    @SuppressWarnings("WeakerAccess")
     public int getSuccesses() {
         return successes;
     }
@@ -107,6 +109,7 @@ public class DiceRolls {
      * Returns the number of failures recorded in the rolls.
      * @return the number of failures recorded.
      */
+    @SuppressWarnings("WeakerAccess")
     public int getFailures() {
         return failures;
     }
@@ -115,6 +118,7 @@ public class DiceRolls {
      * Returns the number of criticals recorded in the rolls.
      * @return the number of criticals recorded.
      */
+    @SuppressWarnings("WeakerAccess")
     public int getCriticals() {
         return criticals;
     }
@@ -123,6 +127,7 @@ public class DiceRolls {
      * Returns the number of fumbles recorded in the rolls.
      * @return the number of fumbles recorded.
      */
+    @SuppressWarnings("WeakerAccess")
     public int getFumbles() {
         return fumbles;
     }
@@ -131,6 +136,7 @@ public class DiceRolls {
      * Returns the number of rolls performed.
      * @return the number of rolls performed.
      */
+    @SuppressWarnings("WeakerAccess")
     public int getNumberOfRolls() {
         return numberOfRolls;
     }
@@ -139,6 +145,7 @@ public class DiceRolls {
      * Returns the number of sides for the dice rolled.
      * @return the number of sides for the dice rolled.
      */
+    @SuppressWarnings("WeakerAccess")
     public int getNumberOfSides() {
         return numberOfSides;
     }

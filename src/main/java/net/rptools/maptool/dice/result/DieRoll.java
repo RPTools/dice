@@ -36,6 +36,7 @@ public class DieRoll {
      * @param value The value rolled.
      * @param flags Any flags associated with the roll.
      */
+    @SuppressWarnings("WeakerAccess")
     public DieRoll(int value, Collection<DieRollFlags> flags) {
         this.value = value;
         this.flags = Set.copyOf(flags);
@@ -62,6 +63,7 @@ public class DieRoll {
      * Returns the flags associated with the die roll.
      * @return the flags associated with the die roll.
      */
+    @SuppressWarnings("WeakerAccess")
     public Collection<DieRollFlags> getFlags() {
         return flags;
     }

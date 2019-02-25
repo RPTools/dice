@@ -123,6 +123,7 @@ public final class DiceExprResult {
 
 
     /** Undefined <code>DiceExprResult</code>. */
+    @SuppressWarnings("WeakerAccess")
     public static DiceExprResult UNDEFINED = new DiceExprResult();
 
 
@@ -146,6 +147,7 @@ public final class DiceExprResult {
      * Gets the double representation of the result.
      * @return the double representation of the result.
      */
+    @SuppressWarnings("WeakerAccess")
     public OptionalDouble getDoubleResult() {
         return hasNumericRepresentation ? OptionalDouble.of(doubleResult) : OptionalDouble.empty();
     }
@@ -172,6 +174,7 @@ public final class DiceExprResult {
      *
      * @return <code>true</code> if the result is made of of rolls, otherwise <code>false</code>.
      */
+    @SuppressWarnings("WeakerAccess")
     public boolean hasRolls() {
         return diceRolls.getNumberOfRolls() > 0;
     }
@@ -181,6 +184,7 @@ public final class DiceExprResult {
      *
      * @return <code>true</code> if the result is number, <code>false</code> otherwise.
      */
+    @SuppressWarnings("WeakerAccess")
     public boolean isNumber() {
         return hasNumericRepresentation;
     }
@@ -231,9 +235,19 @@ public final class DiceExprResult {
         if (left.getType() == DiceResultType.STRING || right.getType() == DiceResultType.STRING) {
             return getStringResult(left.getStringResult() + right.getStringResult());
         } else if (left.getType() == DiceResultType.DOUBLE || right.getType() == DiceResultType.DOUBLE) {
-            return getDoubleResult(left.getDoubleResult().getAsDouble() + right.getDoubleResult().getAsDouble());
+            left.getDoubleResult().orElseThrow(() -> new IllegalArgumentException("Left hand side of addition is undefined."));
+            double leftVal = left.getDoubleResult().getAsDouble();
+            right.getDoubleResult().orElseThrow(() -> new IllegalArgumentException("Right hand side of addition is undefined."));
+            double rightVal = right.getDoubleResult().getAsDouble();
+
+            return getDoubleResult(leftVal + rightVal);
         } else {
-            return getIntResult(left.getIntResult().getAsInt() + right.getIntResult().getAsInt());
+            left.getIntResult().orElseThrow(() -> new IllegalArgumentException("Left hand side of addition is undefined."));
+            int leftVal = left.getIntResult().getAsInt();
+            right.getIntResult().orElseThrow(() -> new IllegalArgumentException("Right hand side of addition is undefined."));
+            int rightVal = right.getIntResult().getAsInt();
+
+            return getIntResult(leftVal + rightVal);
         }
     }
 
@@ -260,9 +274,19 @@ public final class DiceExprResult {
         } else if (right.getType() == DiceResultType.STRING) {
             throw new IllegalArgumentException("Can not subtract a string from a number");
         } else if (left.getType() == DiceResultType.DOUBLE || right.getType() == DiceResultType.DOUBLE) {
-            return getDoubleResult(left.getDoubleResult().getAsDouble() - right.getDoubleResult().getAsDouble());
+            left.getDoubleResult().orElseThrow(() -> new IllegalArgumentException("Left hand side of subtraction is undefined."));
+            double leftVal = left.getDoubleResult().getAsDouble();
+            right.getDoubleResult().orElseThrow(() -> new IllegalArgumentException("Right hand side of subtraction is undefined."));
+            double rightVal = right.getDoubleResult().getAsDouble();
+
+            return getDoubleResult(leftVal - rightVal);
         } else {
-            return getIntResult(left.getIntResult().getAsInt() - right.getIntResult().getAsInt());
+            left.getIntResult().orElseThrow(() -> new IllegalArgumentException("Left hand side of subtraction is undefined."));
+            int leftVal = left.getIntResult().getAsInt();
+            right.getIntResult().orElseThrow(() -> new IllegalArgumentException("Right hand side of subtraction is undefined."));
+            int rightVal = right.getIntResult().getAsInt();
+
+            return getIntResult(leftVal - rightVal);
         }
     }
 
@@ -289,22 +313,34 @@ public final class DiceExprResult {
             String str;
 
             if (left.getType() == DiceResultType.STRING) {
+                right.getIntResult().orElseThrow(() -> new IllegalArgumentException("Right hand side of multiplication is undefined."));
                 times = right.getIntResult().getAsInt();
                 str = left.getStringResult();
             } else {
+                left.getIntResult().orElseThrow(() -> new IllegalArgumentException("Left hand side of multiplication is undefined."));
                 times = left.getIntResult().getAsInt();
                 str = right.getStringResult();
             }
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             sb.ensureCapacity(times * str.length());
             for (int i = 0; i < times; i++) {
                 sb.append(str);
             }
             return getStringResult(sb.toString());
         } else if (left.getType() == DiceResultType.DOUBLE || right.getType() == DiceResultType.DOUBLE) {
-            return getDoubleResult(left.getDoubleResult().getAsDouble() * right.getDoubleResult().getAsDouble());
+            left.getDoubleResult().orElseThrow(() -> new IllegalArgumentException("Left hand side of multiplication is undefined."));
+            double leftVal = left.getDoubleResult().getAsDouble();
+            right.getDoubleResult().orElseThrow(() -> new IllegalArgumentException("Right hand side of multiplication is undefined."));
+            double rightVal = right.getDoubleResult().getAsDouble();
+
+            return getDoubleResult(leftVal * rightVal);
         } else {
-            return getIntResult(left.getIntResult().getAsInt() * right.getIntResult().getAsInt());
+            left.getIntResult().orElseThrow(() -> new IllegalArgumentException("Left hand side of multiplication is undefined."));
+            int leftVal = left.getIntResult().getAsInt();
+            right.getIntResult().orElseThrow(() -> new IllegalArgumentException("Right hand side of multiplication is undefined."));
+            int rightVal = right.getIntResult().getAsInt();
+
+            return getIntResult(leftVal * rightVal);
         }
     }
 
@@ -327,9 +363,19 @@ public final class DiceExprResult {
         if (left.getType() == DiceResultType.STRING || right.getType() == DiceResultType.STRING) {
             throw new IllegalArgumentException("Strings can not take part in division.");
         } else if (left.getType() == DiceResultType.DOUBLE || right.getType() == DiceResultType.DOUBLE) {
-            return getDoubleResult(left.getDoubleResult().getAsDouble() / right.getDoubleResult().getAsDouble());
+            left.getDoubleResult().orElseThrow(() -> new IllegalArgumentException("Left hand side of division is undefined."));
+            double leftVal = left.getDoubleResult().getAsDouble();
+            right.getDoubleResult().orElseThrow(() -> new IllegalArgumentException("Right hand side of division is undefined."));
+            double rightVal = right.getDoubleResult().getAsDouble();
+
+            return getDoubleResult(leftVal / rightVal);
         } else {
-            return getIntResult(left.getIntResult().getAsInt() / right.getIntResult().getAsInt());
+            left.getIntResult().orElseThrow(() -> new IllegalArgumentException("Left hand side of division is undefined."));
+            int leftVal = left.getIntResult().getAsInt();
+            right.getIntResult().orElseThrow(() -> new IllegalArgumentException("Right hand side of division is undefined."));
+            int rightVal = right.getIntResult().getAsInt();
+
+            return getIntResult(leftVal / rightVal);
         }
     }
 
@@ -343,15 +389,21 @@ public final class DiceExprResult {
      */
     public static DiceExprResult negate(DiceExprResult value) throws IllegalArgumentException {
         if (value.getType() == DiceResultType.UNDEFINED) {
-            throw new IllegalArgumentException("Left hand side of division is undefined.");
+            throw new IllegalArgumentException("Can't negate undefined.");
         }
 
         if (value.getType() == DiceResultType.STRING) {
             throw new IllegalArgumentException("Strings can not be negated.");
         } else if (value.getType() == DiceResultType.DOUBLE) {
-            return getDoubleResult(value.getDoubleResult().getAsDouble() * -1.0);
+            value.getDoubleResult().orElseThrow(() -> new IllegalArgumentException("Can't negate undefined."));
+            double val = value.getDoubleResult().getAsDouble();
+
+            return getDoubleResult(-val);
         } else {
-            return getIntResult(value.getIntResult().getAsInt() * -1);
+            value.getIntResult().orElseThrow(() -> new IllegalArgumentException("Can't negate undefined."));
+            int val = value.getIntResult().getAsInt();
+
+            return getIntResult(-val);
         }
     }
 }

@@ -16,6 +16,7 @@ public class DiceRollerArgument {
     private final String operator;
 
     /** Any number that forms part of the argument. */
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private final OptionalInt number;
 
 
@@ -46,6 +47,7 @@ public class DiceRollerArgument {
      * @param name The name of the argument.
      * @param num The number that is part of the argument.
      */
+    @SuppressWarnings("WeakerAccess")
     public DiceRollerArgument(String name, int num) {
         argumentName = name;
         operator = null;
@@ -56,6 +58,7 @@ public class DiceRollerArgument {
      * Returns the argument name.
      * @return the name of the argument.
      */
+    @SuppressWarnings("WeakerAccess")
     public String getArgumentName() {
         return argumentName;
     }
@@ -64,6 +67,7 @@ public class DiceRollerArgument {
      * Returns the operator if any that was used im the argument..
      * @return the operator if any that was used.
      */
+    @SuppressWarnings("WeakerAccess")
     public Optional<String> getOperator() {
         return Optional.ofNullable(operator);
     }
@@ -72,6 +76,7 @@ public class DiceRollerArgument {
      * Returns the number for the argument.
      * @return the number for the argument.
      */
+    @SuppressWarnings("WeakerAccess")
     public OptionalInt getNumber() {
         return number;
     }
@@ -80,6 +85,7 @@ public class DiceRollerArgument {
      * Was no number supplied to the argument.
      * @return <code>true</code> if no number was supplied to the argument and the default should be used.
      */
+    @SuppressWarnings("WeakerAccess")
     public boolean useDefaultNumber() {
         return number.isEmpty();
     }
@@ -87,9 +93,9 @@ public class DiceRollerArgument {
     @Override
     public String toString() {
         if (operator == null) {
-            return argumentName + " " + (number.isEmpty() ? "(default)" : number.getAsInt());
+            return argumentName + (number.isEmpty() ? "" : " = " + number.getAsInt());
         } else {
-            return argumentName + " " + operator + " " + number.getAsInt();
+            return argumentName + " " + operator + " " + (number.isEmpty() ? "(default)" : number.getAsInt());
         }
     }
 }

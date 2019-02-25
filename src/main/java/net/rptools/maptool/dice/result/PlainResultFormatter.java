@@ -5,42 +5,75 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This class implements a plain text
+ */
 public class PlainResultFormatter implements ResultFormatter {
 
 
+    /**
+     * Class used to keep track of the output for each of the expressions.
+     */
     private static class Details {
+        /** The detailed information in the output. */
         private final List<String> details;
+        /** The total result of the output. */
         private final String result;
+        /** The expression that the output is for. */
         private final String expression;
 
-        public Details(String res, Collection<String> det, String expr) {
+        /**
+         * Creates a new <code>Details</code> object to hold the output details generated.
+         * @param res The total result.
+         * @param det The detailed information in the output.
+         * @param expr The expression that the output is for.
+         */
+        Details(String res, Collection<String> det, String expr) {
             result = res;
             details = List.copyOf(det);
             expression = expr;
         }
 
 
+        /**
+         * Returns the total result of the expression as a <code>String</code>.
+         * @return the total result of the expression as a <code>String</code>.
+         */
         public String getResult() {
             return result;
         }
 
-        public List<String> getDetails() {
+        /**
+         * Returns a list of the lines of detailed information in the output.
+         *
+         * @return a list of the lines of detailed information in the output.
+         */
+        List<String> getDetails() {
             return details;
         }
 
+        /**
+         * Returns the expression that was used to generate the output.
+         *
+         * @return the expression that was used to generate the output.
+         */
         public String getExpression() {
             return expression;
         }
     }
 
+    /** The details for the current expression. */
     private List<String> currentDetails = new LinkedList<>();
+    /** The result of the current expression. */
     private String currentResult = "";
+    /** The current expression that the output is being built for. */
     private String currentExpression = "";
 
 
+    /** A list of all the details captured for each of the completed expressions. */
     private final List<Details> details = new LinkedList<>();
 
-
+    /** Should the output be hidden. */
     private boolean hidden = false;
 
 
@@ -71,15 +104,14 @@ public class PlainResultFormatter implements ResultFormatter {
 
     @Override
     public void addRoll(DiceRolls rolls) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(rolls.getNumberOfRolls()).append(rolls.getName()).append(rolls.getNumberOfSides())
-                .append(" = ").append(rolls.getResult().getStringResult());
-        currentDetails.add(sb.toString());
+        String str = rolls.getNumberOfRolls() + rolls.getName() + rolls.getNumberOfSides() +
+                " = " + rolls.getResult().getStringResult();
+        currentDetails.add(str);
     }
 
 
     private Optional<String> format(Details details) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         if (details.getResult() == null || details.getResult().length() == 0) {
             return Optional.empty();
@@ -87,7 +119,7 @@ public class PlainResultFormatter implements ResultFormatter {
 
         sb.append(details.getExpression()).append(" = ").append(details.getResult()).append("\n");
 
-        details.getDetails().stream().forEach(l -> sb.append("\t").append(l).append("\n"));
+        details.getDetails().forEach(l -> sb.append("\t").append(l).append("\n"));
 
 
         return Optional.of(sb.toString());
@@ -95,7 +127,7 @@ public class PlainResultFormatter implements ResultFormatter {
 
     @Override
     public Optional<String> format() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         boolean first = true;
         for (var det : details) {
             if (!first) {
@@ -104,9 +136,7 @@ public class PlainResultFormatter implements ResultFormatter {
                 first = false;
             }
             var str = format(det);
-            if (str.isPresent()) {
-                sb.append(str.get());
-            }
+            str.ifPresent(sb::append);
         }
 
         if (sb.length() > 0) {

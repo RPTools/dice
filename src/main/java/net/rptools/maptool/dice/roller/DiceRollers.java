@@ -34,19 +34,22 @@ public class DiceRollers {
 
         Set<Class<?>> classes =
                 reflections.getTypesAnnotatedWith(DiceRollerDefinition.class);
-        classes.stream().forEach( cl -> {
+        classes.forEach(cl -> {
             try {
                 Object obj = cl.getDeclaredConstructor(new Class[0]).newInstance();
                 if (obj instanceof DiceRoller) {
                     DiceRollerDefinition def = cl.getAnnotation(DiceRollerDefinition.class);
-                    regiserDiceRoller(def.patterns(), (DiceRoller) obj);
+                    registerDiceRoller(def.patterns(), (DiceRoller) obj);
                 } else {
+                    // TODO: Change to logging
                     System.err.println("Unable to register DiceRoller " + cl.getName() + " as it is wrong type.");
                 }
             } catch (Exception e) {
+                // TODO: Change to logging
                 System.err.println("Unable to register DiceRoller " + cl.getName());
             }
         });
+        // TODO: Change to logging
         System.out.println("Registerd " + diceRollers.size() + " patterns for dice rollers");
     }
 
@@ -55,7 +58,7 @@ public class DiceRollers {
      * @param patterns The patterns that the {@link DiceRoller} should be registered for.
      * @param roller The {@link DiceRoller} that should be registered.
      */
-    private void regiserDiceRoller(String[] patterns, DiceRoller roller) {
+    private void registerDiceRoller(String[] patterns, DiceRoller roller) {
         for (String pattern : patterns) {
             diceRollers.put(pattern, roller);
         }
