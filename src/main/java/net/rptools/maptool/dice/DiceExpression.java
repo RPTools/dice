@@ -1,3 +1,11 @@
+/*
+ * This software Copyright by the RPTools.net development team, and licensed under the Affero GPL Version 3 or, at your option, any later version.
+ *
+ * MapTool Source Code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * You should have received a copy of the GNU Affero General Public License * along with this source Code. If not, please visit <http://www.gnu.org/licenses/> and specifically the Affero license text
+ * at <http://www.gnu.org/licenses/agpl.html>.
+ */
 package net.rptools.maptool.dice;
 
 import net.rptools.maptool.dice.expressiontree.DiceExpressionNode;
@@ -17,53 +25,50 @@ import java.util.Optional;
 
 public class DiceExpression {
 
+	private final DiceRollVisitor visitor;
+	private final List<DiceExpressionNode> roots;
 
-    private final DiceRollVisitor visitor;
-    private final List<DiceExpressionNode> roots;
+	private DiceExpression(CharStream charStream) {
+		// Create a lexer that feeds off of input CharStream
+		DiceExprLexer lexer = new DiceExprLexer(charStream);
 
-    private DiceExpression(CharStream charStream) {
-        // Create a lexer that feeds off of input CharStream
-        DiceExprLexer lexer = new DiceExprLexer(charStream);
+		// create a buffer of tokens pulled from the lexer
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
 
-        // create a buffer of tokens pulled from the lexer
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
+		// create a parser that feeds off the tokens buffer
+		DiceExprParser parser = new DiceExprParser(tokens);
 
-        // create a parser that feeds off the tokens buffer
-        DiceExprParser parser = new DiceExprParser(tokens);
+		ParseTree parseTree = parser.diceRolls();
 
-        ParseTree parseTree = parser.diceRolls();
+		// Create a generic parse expressiontree walker that can trigger callbacks
+		ParseTreeWalker walker = new ParseTreeWalker();
 
-        // Create a generic parse expressiontree walker that can trigger callbacks
-        ParseTreeWalker walker = new ParseTreeWalker();
+		visitor = new DiceRollVisitor();
+		visitor.visit(parseTree);
 
-        visitor = new DiceRollVisitor();
-        visitor.visit(parseTree);
+		roots = visitor.getExpressionTrees();
+	}
 
-        roots = visitor.getExpressionTrees();
-    }
+	public static DiceExpression fromString(String expr) {
+		return new DiceExpression(CharStreams.fromString(expr));
+	}
 
+	public static DiceExpression fromFile(String filename) throws IOException {
+		return new DiceExpression(CharStreams.fromFileName(filename));
+	}
 
-    public static DiceExpression fromString(String expr) {
-        return new DiceExpression(CharStreams.fromString(expr));
-    }
+	public static DiceExpression fromInputStream(InputStream inputStream) throws IOException {
+		return new DiceExpression(CharStreams.fromStream(inputStream));
+	}
 
-    public static DiceExpression fromFile(String filename) throws IOException {
-        return new DiceExpression(CharStreams.fromFileName(filename));
-    }
+	public void execute(DiceExpressionSymbolTable symbolTable) {
+		for (var root : roots) {
+			root.evaluate(symbolTable);
+		}
+	}
 
-    public static DiceExpression fromInputStream(InputStream inputStream) throws IOException {
-        return new DiceExpression(CharStreams.fromStream(inputStream));
-    }
-
-
-    public void execute(DiceExpressionSymbolTable symbolTable) {
-        for (var root : roots) {
-            root.evaluate(symbolTable);
-        }
-    }
-
-    public Optional<String> format(ResultFormatter formatter) {
-        var results = new ResultDetails();
-        return results.format(roots, formatter);
-    }
+	public Optional<String> format(ResultFormatter formatter) {
+		var results = new ResultDetails();
+		return results.format(roots, formatter);
+	}
 }
