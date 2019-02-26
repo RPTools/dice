@@ -1,10 +1,16 @@
 /*
- * This software Copyright by the RPTools.net development team, and licensed under the Affero GPL Version 3 or, at your option, any later version.
+ * This software Copyright by the RPTools.net development team, and
+ * licensed under the Affero GPL Version 3 or, at your option, any later
+ * version.
  *
- * MapTool Source Code is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * MapTool Source Code is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * You should have received a copy of the GNU Affero General Public License * along with this source Code. If not, please visit <http://www.gnu.org/licenses/> and specifically the Affero license text
- * at <http://www.gnu.org/licenses/agpl.html>.
+ * You should have received a copy of the GNU Affero General Public
+ * License * along with this source Code.  If not, please visit
+ * <http://www.gnu.org/licenses/> and specifically the Affero license
+ * text at <http://www.gnu.org/licenses/agpl.html>.
  */
 package net.rptools.maptool.dice.expressiontree;
 
@@ -25,102 +31,102 @@ import java.util.stream.Collectors;
  */
 public class DiceRollDiceExpressionNode implements DiceExpressionNode {
 
-	/** the number of sides on the dice. **/
-	private final DiceExpressionNode numberOfSides;
+    /** the number of sides on the dice. **/
+    private final DiceExpressionNode numberOfSides;
 
-	/** The number of dice to roll. */
-	private final DiceExpressionNode numberOfDice;
+    /** The number of dice to roll. */
+    private final DiceExpressionNode numberOfDice;
 
-	/** The name of the dice. */
-	private final String diceName;
+    /** The name of the dice. */
+    private final String diceName;
 
-	/** The input string for the roll. */
-	private final String diceString;
+    /** The input string for the roll. */
+    private final String diceString;
 
-	/** The arguments to the dice roller. */
-	private final List<DiceRollerArgument> rollerArguments;
+    /** The arguments to the dice roller. */
+    private final List<DiceRollerArgument> rollerArguments;
 
-	/** The result of evaluating the expression. */
-	private DiceExprResult result;
+    /** The result of evaluating the expression. */
+    private DiceExprResult result;
 
-	/**
-	 * Create a node to hold a dice roll.
-	 *
-	 * @param name
-	 *            The name of the dice.
-	 * @param numDice
-	 *            The number of dice to roll.
-	 * @param numSides
-	 *            The number of sides om the dice.
-	 * @param args
-	 *            The arguments to the dice roll.
-	 * @param str
-	 *            The dice roll string..
-	 */
-	public DiceRollDiceExpressionNode(String name, DiceExpressionNode numDice, DiceExpressionNode numSides, Collection<DiceRollerArgument> args, String str) {
-		diceName = name;
-		rollerArguments = List.copyOf(args);
-		diceString = str;
-		numberOfSides = numSides;
-		numberOfDice = numDice;
-	}
+    /**
+     * Create a node to hold a dice roll.
+     *
+     * @param name
+     *            The name of the dice.
+     * @param numDice
+     *            The number of dice to roll.
+     * @param numSides
+     *            The number of sides om the dice.
+     * @param args
+     *            The arguments to the dice roll.
+     * @param str
+     *            The dice roll string..
+     */
+    public DiceRollDiceExpressionNode(String name, DiceExpressionNode numDice, DiceExpressionNode numSides, Collection<DiceRollerArgument> args, String str) {
+        diceName = name;
+        rollerArguments = List.copyOf(args);
+        diceString = str;
+        numberOfSides = numSides;
+        numberOfDice = numDice;
+    }
 
-	@Override
-	public DiceExprResult evaluate(DiceExpressionSymbolTable symbolTable) throws UnsupportedOperationException {
-		int dice = numberOfDice.evaluate(symbolTable).getIntResult().getAsInt();
-		int sides = numberOfSides.evaluate(symbolTable).getIntResult().getAsInt();
-		result = DiceRollers.getInstance().getDiceRoller(diceName).roll(diceName, dice, sides);
-		return result;
-	}
+    @Override
+    public DiceExprResult evaluate(DiceExpressionSymbolTable symbolTable) throws UnsupportedOperationException {
+        int dice = numberOfDice.evaluate(symbolTable).getIntResult().getAsInt();
+        int sides = numberOfSides.evaluate(symbolTable).getIntResult().getAsInt();
+        result = DiceRollers.getInstance().getDiceRoller(diceName).roll(diceName, dice, sides);
+        return result;
+    }
 
-	@Override
-	public DiceExprResult getExprResult() {
-		return result;
-	}
+    @Override
+    public DiceExprResult getExprResult() {
+        return result;
+    }
 
-	@Override
-	public Collection<DiceExpressionNode> getChildren() {
-		return Arrays.asList(new DiceExpressionNode[] { numberOfDice, numberOfSides });
-	}
+    @Override
+    public Collection<DiceExpressionNode> getChildren() {
+        return Arrays.asList(new DiceExpressionNode[] { numberOfDice, numberOfSides });
+    }
 
-	/**
-	 * Format the rolls as a String for display.
-	 *
-	 * @param diceRolls
-	 *            the rolls to format.
-	 * @return a formatted string for the rolls.
-	 */
-	private String formatRolls(DiceRolls diceRolls) {
+    /**
+     * Format the rolls as a String for display.
+     *
+     * @param diceRolls
+     *            the rolls to format.
+     * @return a formatted string for the rolls.
+     */
+    private String formatRolls(DiceRolls diceRolls) {
 
-		StringBuilder sb = new StringBuilder();
-		LinkedList<String> rolls = new LinkedList<>();
+        StringBuilder sb = new StringBuilder();
+        LinkedList<String> rolls = new LinkedList<>();
 
-		for (var dr : diceRolls.getDiceRolls()) {
-			sb.setLength(0);
-			sb.append("<span class=\"dieRoll");
-			if (dr.isCritical()) {
-				sb.append(" criticalRoll");
-			}
+        for (var dr : diceRolls.getDiceRolls()) {
+            sb.setLength(0);
+            sb.append("<span class=\"dieRoll");
+            if (dr.isCritical()) {
+                sb.append(" criticalRoll");
+            }
 
-			if (dr.isFumble()) {
-				sb.append(" fumbleRoll");
-			}
+            if (dr.isFumble()) {
+                sb.append(" fumbleRoll");
+            }
 
-			if (dr.isSuccess()) {
-				sb.append(" successRoll");
-			}
+            if (dr.isSuccess()) {
+                sb.append(" successRoll");
+            }
 
-			if (dr.isFailure()) {
-				sb.append(" failureRoll");
-			}
+            if (dr.isFailure()) {
+                sb.append(" failureRoll");
+            }
 
-			sb.append('"').append(">").append(dr.getValue()).append("</span>");
+            sb.append('"').append(">").append(dr.getValue()).append("</span>");
 
-			rolls.add(sb.toString());
+            rolls.add(sb.toString());
 
-		}
+        }
 
-		return rolls.stream().collect(Collectors.joining(","));
+        return rolls.stream().collect(Collectors.joining(","));
 
-	}
+    }
 }

@@ -40,11 +40,11 @@ spotless {
     val javaFormatterConfigFile = rootProject.file("build-resources/eclipse.prefs.formatter.xml");
 
     java {
+        target("src/**/*.java")
+        eclipse().configFile(javaFormatterConfigFile)
         licenseHeaderFile(file("build-resources/spotless.license.java"))
         trimTrailingWhitespace()
-        paddedCell()
-        indentWithSpaces()
-        eclipse().configFile(javaFormatterConfigFile)
+        indentWithSpaces(4)
     }
 }
 
