@@ -1,7 +1,10 @@
+import org.eclipse.jgit.util.RawCharUtil.trimTrailingWhitespace
 
 plugins {
     antlr
     application
+    eclipse
+    id("com.diffplug.gradle.spotless") version "3.18.0"
 }
 
 group = "net.rptools.maptool.dice"
@@ -16,7 +19,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.4.0")
     compile("org.reflections", "reflections", "0.9.11")
     compile("org.apache.commons", "commons-text", "1.6")
-
+    compile("com.diffplug.spotless", "spotless-plugin-gradle", "3.18.0")
 }
 
 configure<JavaPluginConvention> {
@@ -31,6 +34,17 @@ application {
 tasks.generateGrammarSource {
     maxHeapSize = "64m"
     arguments = arguments + listOf("-visitor", "-long-messages")
+}
+
+spotless {
+    val javaFormatterConfigFile = rootProject.file("build-resources/eclipse.prefs.formatter.xml");
+
+    java {
+        //licenseHeaderFile(file("build-resources/spotless.license.java"))
+        trimTrailingWhitespace()
+        paddedCell()
+        eclipse().configFile(javaFormatterConfigFile)
+    }
 }
 
 tasks.jar {
