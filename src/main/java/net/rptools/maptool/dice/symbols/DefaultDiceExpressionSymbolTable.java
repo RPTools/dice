@@ -21,8 +21,8 @@ public class DefaultDiceExpressionSymbolTable implements DiceExpressionSymbolTab
      */
     public DefaultDiceExpressionSymbolTable() {
         DiceEvalScope[] scopes = DiceEvalScope.values();
-        for (int i = 0; i < scopes.length; i++) {
-            variables.put(scopes[i], new HashMap<>());
+        for (DiceEvalScope scope : scopes) {
+            variables.put(scope, new HashMap<>());
         }
     }
 

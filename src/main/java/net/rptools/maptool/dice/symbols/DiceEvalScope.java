@@ -45,6 +45,14 @@ public enum DiceEvalScope {
         return scopePrefix;
     }
 
+    /**
+     * Returns the enum value for the specified prefix.
+     * @param scopePrefix The prefix to get the enumerated type value for.
+     *
+     * If the prefix is not valid then an {@link IllegalArgumentException} will be thrown.
+     *
+     * @return the enumerated type value for the prefix.
+     */
     public static DiceEvalScope getScopeForPrefix(String scopePrefix) {
         for (var scope : values()) {
             if (scope.getScopePrefix().equals(scopePrefix)) {
@@ -52,7 +60,6 @@ public enum DiceEvalScope {
             }
         }
 
-        // TODO: should throw an exception here.
-        return null;
+        throw new IllegalArgumentException("Unknown scope prefix " + scopePrefix);
     }
 }
