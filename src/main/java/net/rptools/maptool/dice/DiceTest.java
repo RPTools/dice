@@ -33,13 +33,10 @@ public class DiceTest {
         } else {
             System.out.println("Reading Script: '" + args[0] + "'");
             diceExpression = DiceExpression.fromFile(args[0]);
-        } /*
-           * * System.out.println(); System.out.println(); System.out.println(expressiontree.toStringTree(parser)); System.out.println();
-           */
+        }
 
         diceExpression.execute(symbolTable);
         diceExpression.format(new PlainResultFormatter()).ifPresent(System.out::println);
-        // System.out.println(diceExpression.format(new PlainResultFormatter()));
 
         System.out.println("Local Variables");
         symbolTable.getVariableNames(DiceEvalScope.LOCAL).forEach(name -> {
