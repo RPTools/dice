@@ -19,7 +19,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.4.0")
     compile("org.reflections", "reflections", "0.9.11")
     compile("org.apache.commons", "commons-text", "1.6")
-    compile("com.diffplug.spotless", "spotless-plugin-gradle", "3.18.0")
 }
 
 configure<JavaPluginConvention> {
@@ -68,6 +67,15 @@ tasks.withType<Test> {
 task<Jar>("uberJar") {
     appendix = "uber"
 
+
+
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from(Callable {
+        configurations.runtimeClasspath.filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+    exclude("META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA")
     manifest {
         attributes(
                 "Implementation-Title" to "Dice",
@@ -76,10 +84,4 @@ task<Jar>("uberJar") {
         )
     }
 
-    from(sourceSets.main.get().output)
-
-    dependsOn(configurations.runtimeClasspath)
-    from(Callable {
-        configurations.runtimeClasspath.filter { it.name.endsWith("jar") }.map { zipTree(it) }
-    })
 }
