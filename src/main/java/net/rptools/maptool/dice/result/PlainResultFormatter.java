@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * This class implements a plain text
@@ -119,11 +120,37 @@ public class PlainResultFormatter implements ResultFormatter {
 
     @Override
     public void addRoll(DiceRolls rolls) {
-        String str = rolls.getNumberOfRolls() + rolls.getName() + rolls.getNumberOfSides() +
-                " = " + rolls.getResult().getStringResult();
-        currentDetails.add(str);
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(rolls.getNumberOfRolls()).append(rolls.getName()).append(rolls.getNumberOfSides());
+        sb.append(" = [");
+        String listOfRolls = rolls.getDiceRolls().stream().map(r -> {
+            if (r.isSuccess()) {
+                return r.getValue() + "(s)";
+            } else if (r.isFumble()) {
+                return r.getValue() + "(F)";
+            } else if (r.isCritical()) {
+                return r.getValue() + "(C)";
+            } else if (r.isFailure()) {
+                return r.getValue() + "(f)";
+            } else {
+                return Integer.toString(r.getValue());
+            }
+        }).collect(Collectors.joining(", "));
+
+        sb.append(listOfRolls).append("] = ").append(rolls.getResult().getStringResult());
+
+        currentDetails.add(sb.toString());
     }
 
+    /**
+     * This method formats a {@link Details} object as a <code>String</code>.
+     *
+     * @param details
+     *            The object to format.
+     *
+     * @return the object formatted as a <code>String</code>.
+     */
     private Optional<String> format(Details details) {
         StringBuilder sb = new StringBuilder();
 
