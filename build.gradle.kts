@@ -7,7 +7,7 @@ plugins {
     id("com.diffplug.gradle.spotless") version "3.18.0"
 }
 
-group = "net.rptools.maptool.dice"
+group = "net.rptools.dice"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -26,7 +26,7 @@ configure<JavaPluginConvention> {
 }
 
 application {
-    mainClassName = "net.rptools.maptool.dice.DiceTest"
+    mainClassName = "net.rptools.dice.DiceTest"
 }
 
 
@@ -62,7 +62,7 @@ tasks.jar {
         attributes(
                 "Implementation-Title" to "Dice",
                 "Implementation-Version" to version,
-                "Main-Class" to "net.rptools.maptool.dice.DiceTest"
+                "Main-Class" to "net.rptools.dice.DiceTest"
         )
     }
 }
@@ -90,7 +90,7 @@ task<Jar>("uberJar") {
         attributes(
                 "Implementation-Title" to "Dice",
                 "Implementation-Version" to version,
-                "Main-Class" to "net.rptools.maptool.dice.DiceTest"
+                "Main-Class" to "net.rptools.dice.DiceTest"
         )
     }
 

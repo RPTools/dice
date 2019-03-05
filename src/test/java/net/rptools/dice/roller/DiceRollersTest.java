@@ -26,7 +26,7 @@ class DiceRollersTest {
   void registeredDiceRollers() {
     DiceRollers diceRollers = DiceRollers.getInstance();
 
-    Reflections reflections = new Reflections("net.rptools.maptool.dice");
+    Reflections reflections = new Reflections("net.rptools.dice");
 
     Set<Class<?>> classes = reflections.getTypesAnnotatedWith(DiceRollerDefinition.class);
     classes.forEach(

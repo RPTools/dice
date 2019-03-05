@@ -45,7 +45,7 @@ public class DiceRollers {
    * classes and register them.
    */
   private DiceRollers() {
-    Reflections reflections = new Reflections("net.rptools.maptool.dice");
+    Reflections reflections = new Reflections("net.rptools.dice");
 
     Set<Class<?>> classes = reflections.getTypesAnnotatedWith(DiceRollerDefinition.class);
     classes.forEach(
