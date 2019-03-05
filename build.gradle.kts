@@ -1,9 +1,9 @@
-import org.eclipse.jgit.util.RawCharUtil.trimTrailingWhitespace
 
 plugins {
     antlr
     application
     eclipse
+    jacoco
     id("com.diffplug.gradle.spotless") version "3.18.0"
 }
 
@@ -95,3 +95,9 @@ task<Jar>("uberJar") {
     }
 
 }
+
+jacoco {
+    toolVersion = "0.8.3"
+    reportsDir = file("build/reports/jacoco")
+}
+
