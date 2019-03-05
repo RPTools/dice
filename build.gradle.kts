@@ -36,14 +36,24 @@ tasks.generateGrammarSource {
 }
 
 spotless {
-    val javaFormatterConfigFile = rootProject.file("build-resources/eclipse.prefs.formatter.xml");
 
     java {
         target("src/**/*.java")
-        eclipse().configFile(javaFormatterConfigFile)
         licenseHeaderFile(file("build-resources/spotless.license.java"))
+        googleJavaFormat()
+        // https://github.com/diffplug/spotless/blob/master/PADDEDCELL.md
+        paddedCell()
+    }
+
+    format("misc") {
+        target("**/*.gradle", "**/.gitignore")
+
+        // spotless has built-in rules for most basic formatting tasks
         trimTrailingWhitespace()
+        // or spaces. Takes an integer argument if you don't like 4
         indentWithSpaces(4)
+        // https://github.com/diffplug/spotless/blob/master/PADDEDCELL.md
+        paddedCell()
     }
 }
 

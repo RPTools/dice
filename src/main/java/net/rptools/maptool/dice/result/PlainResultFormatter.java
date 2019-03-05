@@ -20,196 +20,193 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * This class implements a plain text
- */
+/** This class implements a plain text */
 public class PlainResultFormatter implements ResultFormatter {
 
+  /** Class used to keep track of the output for each of the expressions. */
+  private static class Details {
+    /** The detailed information in the output. */
+    private final List<String> details;
+    /** The total result of the output. */
+    private final String result;
+    /** The expression that the output is for. */
+    private final String expression;
+
     /**
-     * Class used to keep track of the output for each of the expressions.
+     * Creates a new <code>Details</code> object to hold the output details generated.
+     *
+     * @param res The total result.
+     * @param det The detailed information in the output.
+     * @param expr The expression that the output is for.
      */
-    private static class Details {
-        /** The detailed information in the output. */
-        private final List<String> details;
-        /** The total result of the output. */
-        private final String result;
-        /** The expression that the output is for. */
-        private final String expression;
-
-        /**
-         * Creates a new <code>Details</code> object to hold the output details generated.
-         *
-         * @param res
-         *            The total result.
-         * @param det
-         *            The detailed information in the output.
-         * @param expr
-         *            The expression that the output is for.
-         */
-        Details(String res, Collection<String> det, String expr) {
-            result = res;
-            details = List.copyOf(det);
-            expression = expr;
-        }
-
-        /**
-         * Returns the total result of the expression as a <code>String</code>.
-         *
-         * @return the total result of the expression as a <code>String</code>.
-         */
-        public String getResult() {
-            return result;
-        }
-
-        /**
-         * Returns a list of the lines of detailed information in the output.
-         *
-         * @return a list of the lines of detailed information in the output.
-         */
-        List<String> getDetails() {
-            return details;
-        }
-
-        /**
-         * Returns the expression that was used to generate the output.
-         *
-         * @return the expression that was used to generate the output.
-         */
-        public String getExpression() {
-            return expression;
-        }
-    }
-
-    /** The details for the current expression. */
-    private List<String> currentDetails = new LinkedList<>();
-    /** The result of the current expression. */
-    private String currentResult = "";
-    /** The current expression that the output is being built for. */
-    private String currentExpression = "";
-
-    /** A list of all the details captured for each of the completed expressions. */
-    private final List<Details> details = new LinkedList<>();
-
-    /** Should the output be hidden. */
-    private boolean hidden = false;
-
-    @Override
-    public void setResult(DiceExprResult result) {
-        currentResult = result.getStringResult();
-    }
-
-    @Override
-    public void setExpression(String expression) {
-        currentExpression = expression;
-    }
-
-    @Override
-    public void addResolveSymbol(String symbol, DiceExprResult value) {
-        currentDetails.add(value.getStringResult() + " <- " + symbol);
-    }
-
-    @Override
-    public void addAssignSymbol(String symbol, DiceExprResult value) {
-        currentDetails.add("set " + symbol + " = " + value.getStringResult());
-    }
-
-    @Override
-    public void addPromptValue(String prompt, DiceExprResult value) {
-        currentDetails.add("input (" + prompt + ") = " + value.getStringResult());
-    }
-
-    @Override
-    public void addRoll(DiceRolls rolls) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(rolls.getNumberOfRolls()).append(rolls.getName()).append(rolls.getNumberOfSides());
-        sb.append(" = [");
-        String listOfRolls = rolls.getDiceRolls().stream().map(r -> {
-            if (r.isSuccess()) {
-                return r.getValue() + "(s)";
-            } else if (r.isFumble()) {
-                return r.getValue() + "(F)";
-            } else if (r.isCritical()) {
-                return r.getValue() + "(C)";
-            } else if (r.isFailure()) {
-                return r.getValue() + "(f)";
-            } else {
-                return Integer.toString(r.getValue());
-            }
-        }).collect(Collectors.joining(", "));
-
-        sb.append(listOfRolls).append("] = ").append(rolls.getResult().getStringResult());
-
-        currentDetails.add(sb.toString());
+    Details(String res, Collection<String> det, String expr) {
+      result = res;
+      details = List.copyOf(det);
+      expression = expr;
     }
 
     /**
-     * This method formats a {@link Details} object as a <code>String</code>.
+     * Returns the total result of the expression as a <code>String</code>.
      *
-     * @param details
-     *            The object to format.
-     *
-     * @return the object formatted as a <code>String</code>.
+     * @return the total result of the expression as a <code>String</code>.
      */
-    private Optional<String> format(Details details) {
-        StringBuilder sb = new StringBuilder();
-
-        if (details.getResult() == null || details.getResult().length() == 0) {
-            return Optional.empty();
-        }
-
-        sb.append(details.getExpression()).append(" = ").append(details.getResult()).append("\n");
-
-        details.getDetails().forEach(l -> sb.append("\t").append(l).append("\n"));
-
-        return Optional.of(sb.toString());
+    public String getResult() {
+      return result;
     }
 
-    @Override
-    public Optional<String> format() {
-        StringBuilder sb = new StringBuilder();
-        boolean first = true;
-        for (var det : details) {
-            if (!first) {
-                sb.append("------------------------------------------------------\n");
-            } else {
-                first = false;
-            }
-            var str = format(det);
-            str.ifPresent(sb::append);
-        }
-
-        if (sb.length() > 0) {
-            return Optional.of(sb.toString());
-        } else {
-            return Optional.empty();
-        }
+    /**
+     * Returns a list of the lines of detailed information in the output.
+     *
+     * @return a list of the lines of detailed information in the output.
+     */
+    List<String> getDetails() {
+      return details;
     }
 
-    @Override
-    public void hideOutput() {
-        hidden = true;
+    /**
+     * Returns the expression that was used to generate the output.
+     *
+     * @return the expression that was used to generate the output.
+     */
+    public String getExpression() {
+      return expression;
+    }
+  }
+
+  /** The details for the current expression. */
+  private List<String> currentDetails = new LinkedList<>();
+  /** The result of the current expression. */
+  private String currentResult = "";
+  /** The current expression that the output is being built for. */
+  private String currentExpression = "";
+
+  /** A list of all the details captured for each of the completed expressions. */
+  private final List<Details> details = new LinkedList<>();
+
+  /** Should the output be hidden. */
+  private boolean hidden = false;
+
+  @Override
+  public void setResult(DiceExprResult result) {
+    currentResult = result.getStringResult();
+  }
+
+  @Override
+  public void setExpression(String expression) {
+    currentExpression = expression;
+  }
+
+  @Override
+  public void addResolveSymbol(String symbol, DiceExprResult value) {
+    currentDetails.add(value.getStringResult() + " <- " + symbol);
+  }
+
+  @Override
+  public void addAssignSymbol(String symbol, DiceExprResult value) {
+    currentDetails.add("set " + symbol + " = " + value.getStringResult());
+  }
+
+  @Override
+  public void addPromptValue(String prompt, DiceExprResult value) {
+    currentDetails.add("input (" + prompt + ") = " + value.getStringResult());
+  }
+
+  @Override
+  public void addRoll(DiceRolls rolls) {
+    StringBuilder sb = new StringBuilder();
+
+    sb.append(rolls.getNumberOfRolls()).append(rolls.getName()).append(rolls.getNumberOfSides());
+    sb.append(" = [");
+    String listOfRolls =
+        rolls.getDiceRolls().stream()
+            .map(
+                r -> {
+                  String postfix = "";
+                  if (r.isSuccess()) {
+                    postfix += "(s)";
+                  }
+                  if (r.isFailure()) {
+                    postfix += "(f)";
+                  }
+                  if (r.isFumble()) {
+                    postfix += "(F)";
+                  }
+                  if (r.isCritical()) {
+                    postfix += "(C)";
+                  }
+                  return r.getValue() + postfix;
+                })
+            .collect(Collectors.joining(", "));
+
+    sb.append(listOfRolls).append("] = ").append(rolls.getResult().getStringResult());
+
+    currentDetails.add(sb.toString());
+  }
+
+  /**
+   * This method formats a {@link Details} object as a <code>String</code>.
+   *
+   * @param details The object to format.
+   * @return the object formatted as a <code>String</code>.
+   */
+  private Optional<String> format(Details details) {
+    StringBuilder sb = new StringBuilder();
+
+    if (details.getResult() == null || details.getResult().length() == 0) {
+      return Optional.empty();
     }
 
-    @Override
-    public void showOutput() {
-        hidden = false;
+    sb.append(details.getExpression()).append(" = ").append(details.getResult()).append("\n");
+
+    details.getDetails().forEach(l -> sb.append("\t").append(l).append("\n"));
+
+    return Optional.of(sb.toString());
+  }
+
+  @Override
+  public Optional<String> format() {
+    StringBuilder sb = new StringBuilder();
+    boolean first = true;
+    for (var det : details) {
+      if (!first) {
+        sb.append("------------------------------------------------------\n");
+      } else {
+        first = false;
+      }
+      var str = format(det);
+      str.ifPresent(sb::append);
     }
 
-    @Override
-    public boolean isOutputHidden() {
-        return hidden;
+    if (sb.length() > 0) {
+      return Optional.of(sb.toString());
+    } else {
+      return Optional.empty();
     }
+  }
 
-    @Override
-    public void start() {
-        currentDetails = new LinkedList<>();
-        currentResult = "";
-    }
+  @Override
+  public void hideOutput() {
+    hidden = true;
+  }
 
-    @Override
-    public void end() {
-        details.add(new Details(currentResult, currentDetails, currentExpression));
-    }
+  @Override
+  public void showOutput() {
+    hidden = false;
+  }
 
+  @Override
+  public boolean isOutputHidden() {
+    return hidden;
+  }
+
+  @Override
+  public void start() {
+    currentDetails = new LinkedList<>();
+    currentResult = "";
+  }
+
+  @Override
+  public void end() {
+    details.add(new Details(currentResult, currentDetails, currentExpression));
+  }
 }

@@ -21,18 +21,25 @@ import java.util.stream.Collectors;
 
 public class InstructionArgumentVisitor extends DiceExprBaseVisitor<List<String>> {
 
-    @Override
-    public List<String> visitInstructionArgumentList(DiceExprParser.InstructionArgumentListContext ctx) {
-        return ctx.instructionArgument().stream().map(arg -> arg.accept(this)).flatMap(Collection::stream).collect(Collectors.toList());
-    }
+  @Override
+  public List<String> visitInstructionArgumentList(
+      DiceExprParser.InstructionArgumentListContext ctx) {
+    return ctx.instructionArgument().stream()
+        .map(arg -> arg.accept(this))
+        .flatMap(Collection::stream)
+        .collect(Collectors.toList());
+  }
 
-    @Override
-    public List<String> visitInstructionArgument(DiceExprParser.InstructionArgumentContext ctx) {
-        return Collections.singletonList(ctx.WORD().getText());
-    }
+  @Override
+  public List<String> visitInstructionArgument(DiceExprParser.InstructionArgumentContext ctx) {
+    return Collections.singletonList(ctx.getChild(0).getText());
+  }
 
-    @Override
-    public List<String> visitDiceArgumentList(DiceExprParser.DiceArgumentListContext ctx) {
-        return ctx.diceArgument().stream().map(arg -> arg.accept(this)).flatMap(Collection::stream).collect(Collectors.toList());
-    }
+  @Override
+  public List<String> visitDiceArgumentList(DiceExprParser.DiceArgumentListContext ctx) {
+    return ctx.diceArgument().stream()
+        .map(arg -> arg.accept(this))
+        .flatMap(Collection::stream)
+        .collect(Collectors.toList());
+  }
 }
