@@ -2,7 +2,7 @@ grammar DiceExpr;
 
 
 @header {
-    package net.rptools.maptool.dice;
+    package net.rptools.dice;
 }
 
 diceRolls                   : diceExprTopLevel ( ';' diceExprTopLevel)* ';'?
