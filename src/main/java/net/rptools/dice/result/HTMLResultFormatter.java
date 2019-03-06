@@ -23,6 +23,8 @@ import java.util.stream.Collectors;
 /** This class implements a plain text */
 public class HTMLResultFormatter implements ResultFormatter {
 
+  private static final String RESOLVE_SYMBOL_CLASS = "resolveSymbol";
+
   /** Class used to keep track of the output for each of the expressions. */
   private static class Details {
     /** The detailed information in the output. */
@@ -98,7 +100,9 @@ public class HTMLResultFormatter implements ResultFormatter {
 
   @Override
   public void addResolveSymbol(String symbol, DiceExprResult value) {
-    currentDetails.add(value.getStringResult() + " <- " + symbol);
+    String str = "<span class=\"" + RESOLVE_SYMBOL_CLASS + "\"> read: " +
+        value.getStringResult() + " &larr; " + symbol + "</span>";
+    currentDetails.add(str);
   }
 
   @Override
