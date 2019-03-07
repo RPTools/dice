@@ -41,7 +41,8 @@ public class HTMLResultFormatter implements ResultFormatter {
   private static final String CRITICAL_FUMBLE_DIE_ROLL_CLASS = "criticalFumbleDieRoll";
   private static final String ROLL_RESULT_CLASS = "rollResult";
   private static final String INLINE_ROLL_DETAILS_CLASS = "inlineRollDetails";
-  private static final String DICE_EXPRESSION_PART_CLASS = "diceExpressionPart";
+  private static final String EXPANDED_DICE_ROLL_CLASS = "diceRollExpansion";
+
 
   /** Class used to keep track of the output for each of the expressions. */
   private static class Details {
@@ -180,9 +181,10 @@ public class HTMLResultFormatter implements ResultFormatter {
   public void addRoll(DiceRolls rolls) {
     StringBuilder sb = new StringBuilder();
 
+    sb.append(buildStartOfElement(DIV_ELEMENT, EXPANDED_DICE_ROLL_CLASS, hidden));
     sb.append(buildElement(
-        DIV_ELEMENT,
-        DICE_EXPRESSION_PART_CLASS,
+        SPAN_ELEMENT,
+        DICE_EXPRESSION_CLASS,
         hidden,
         rolls.getNumberOfRolls() + rolls.getName() + rolls.getNumberOfSides()
     ));
@@ -230,6 +232,7 @@ public class HTMLResultFormatter implements ResultFormatter {
             rolls.getResult().getStringResult()
         )
     );
+    sb.append(buildEndOfElement(DIV_ELEMENT));
 
     currentDetails.add(sb.toString());
   }
