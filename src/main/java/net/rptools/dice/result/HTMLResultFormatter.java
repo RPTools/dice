@@ -118,7 +118,7 @@ public class HTMLResultFormatter implements ResultFormatter {
 
   private String buildEndOfElement(String elementName) {
 
-    return "<" + elementName + ">";
+    return "</" + elementName + ">";
   }
 
 
