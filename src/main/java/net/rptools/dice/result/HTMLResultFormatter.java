@@ -197,10 +197,10 @@ public class HTMLResultFormatter implements ResultFormatter {
                     sbRolls.append(" " + FAILURE_DIE_ROLL_CLASS);
                   }
                   if (r.isFumble()) {
-                    sbRolls.append(" " + CRITICAL_SUCCESS_DIE_ROLL_CLASS);
+                    sbRolls.append(" " + CRITICAL_FUMBLE_DIE_ROLL_CLASS);
                   }
                   if (r.isCritical()) {
-                    sbRolls.append(" " + CRITICAL_FUMBLE_DIE_ROLL_CLASS);
+                    sbRolls.append(" " + CRITICAL_SUCCESS_DIE_ROLL_CLASS);
                   }
                   return buildElement(
                       SPAN_ELEMENT,
