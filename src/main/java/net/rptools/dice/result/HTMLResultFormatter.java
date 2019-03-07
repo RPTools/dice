@@ -229,6 +229,7 @@ public class HTMLResultFormatter implements ResultFormatter {
             rolls.getResult().getStringResult()
         )
     );
+    sb.append("<br/>");
 
     currentDetails.add(sb.toString());
   }
