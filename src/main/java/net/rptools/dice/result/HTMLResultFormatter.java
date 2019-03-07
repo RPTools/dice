@@ -34,7 +34,6 @@ public class HTMLResultFormatter implements ResultFormatter {
   private static final String HIDDEN_CLASS_NAME = "hidden";
   private static final String DICE_EXPRESSION_CLASS = "diceExpression";
   private static final String RESULT_CLASS = "diceResult";
-  private static final String ROLL_DETAILS_CLASS = "rollDetails";
   private static final String DIE_ROLL_CLASS = "dieRoll";
   private static final String SUCCESSFUL_DIE_ROLL_CLASS = "successfulDieRoll";
   private static final String FAILURE_DIE_ROLL_CLASS = "failureDieRoll";
@@ -124,10 +123,9 @@ public class HTMLResultFormatter implements ResultFormatter {
 
   private String buildElement(String elementName, String className, boolean isHidden, String content) {
 
-    String sb = buildStartOfElement(elementName, className, isHidden)
+    return buildStartOfElement(elementName, className, isHidden)
         + content
         + buildEndOfElement(elementName);
-    return sb;
   }
 
   @Override
@@ -214,7 +212,7 @@ public class HTMLResultFormatter implements ResultFormatter {
             .collect(Collectors.joining(", ")
         );
 
-    sb.append(
+    sb.append(" &Rarr; ").append(
         buildElement(
             SPAN_ELEMENT,
             ROLL_RESULT_CLASS,
@@ -222,7 +220,7 @@ public class HTMLResultFormatter implements ResultFormatter {
             "[ " + listOfRolls + " ]"
         )
     );
-    sb.append(" = ").append(
+    sb.append(" &Rarr; ").append(
         buildElement(
             SPAN_ELEMENT,
             ROLL_RESULT_CLASS,
