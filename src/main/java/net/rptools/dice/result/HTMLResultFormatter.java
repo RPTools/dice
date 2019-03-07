@@ -40,6 +40,7 @@ public class HTMLResultFormatter implements ResultFormatter {
   private static final String CRITICAL_SUCCESS_DIE_ROLL_CLASS = "criticalSuccessDieRoll";
   private static final String CRITICAL_FUMBLE_DIE_ROLL_CLASS = "criticalFumbleDieRoll";
   private static final String ROLL_RESULT_CLASS = "rollResult";
+  private static final String INLINE_ROLL_DETAILS_CLASS = "inlineRollDetails";
 
   /** Class used to keep track of the output for each of the expressions. */
   private static class Details {
@@ -290,12 +291,14 @@ public class HTMLResultFormatter implements ResultFormatter {
   @Override
   public void start() {
     currentDetails = new LinkedList<>();
+    currentDetails.add(buildStartOfElement(DIV_ELEMENT, INLINE_ROLL_DETAILS_CLASS, hidden));
     currentDetails.add(buildStartOfElement(DIV_ELEMENT, INLINE_ROLL_PART_CLASS, hidden));
     currentResult = "";
   }
 
   @Override
   public void end() {
+    currentDetails.add(buildEndOfElement(DIV_ELEMENT));
     currentDetails.add(buildEndOfElement(DIV_ELEMENT));
     details.add(new Details(currentResult, currentDetails, currentExpression));
   }
