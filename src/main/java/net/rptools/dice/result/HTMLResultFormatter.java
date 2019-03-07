@@ -23,7 +23,24 @@ import java.util.stream.Collectors;
 /** This class implements a plain text */
 public class HTMLResultFormatter implements ResultFormatter {
 
+  private static final String SPAN_ELEMENT = "span";
+  private static final String DIV_ELEMENT = "div";
+
   private static final String RESOLVE_SYMBOL_CLASS = "resolveSymbol";
+  private static final String ASSIGN_SYMBOL_CLASS = "assignSymbol";
+  private static final String PROMPT_CLASS = "prompt";
+  private static final String INLINE_ROLL_PART_CLASS = "inlineRollPart";
+  private static final String INLINE_ROLL_CLASS = "inlineRoll";
+  private static final String HIDDEN_CLASS_NAME = "hidden";
+  private static final String DICE_EXPRESSION_CLASS = "diceExpression";
+  private static final String RESULT_CLASS = "diceResult";
+  private static final String ROLL_DETAILS_CLASS = "rollDetails";
+  private static final String DIE_ROLL_CLASS = "dieRoll";
+  private static final String SUCCESSFUL_DIE_ROLL_CLASS = "successfulDieRoll";
+  private static final String FAILURE_DIE_ROLL_CLASS = "failureDieRoll";
+  private static final String CRITICAL_SUCCESS_DIE_ROLL_CLASS = "criticalSuccessDieRoll";
+  private static final String CRITICAL_FUMBLE_DIE_ROLL_CLASS = "criticalFumbleDieRile";
+  private static final String ROLL_RESULT_CLASS = "rollResult";
 
   /** Class used to keep track of the output for each of the expressions. */
   private static class Details {
@@ -88,6 +105,31 @@ public class HTMLResultFormatter implements ResultFormatter {
   /** Should the output be hidden. */
   private boolean hidden = false;
 
+  private String buildStartOfElement(String elementName, String className, boolean isHidden) {
+    StringBuilder sb = new StringBuilder();
+    sb.append("<").append(elementName).append(" class=").append('"').append(className);
+    if (isHidden) {
+      sb.append(" ").append(HIDDEN_CLASS_NAME);
+    }
+    sb.append('"').append(">");
+
+    return sb.toString();
+  }
+
+  private String buildEndOfElement(String elementName) {
+
+    return "<" + elementName + ">";
+  }
+
+
+  private String buildElement(String elementName, String className, boolean isHidden, String content) {
+
+    String sb = buildStartOfElement(elementName, className, isHidden)
+        + content
+        + buildEndOfElement(elementName);
+    return sb;
+  }
+
   @Override
   public void setResult(DiceExprResult result) {
     currentResult = result.getStringResult();
@@ -100,49 +142,93 @@ public class HTMLResultFormatter implements ResultFormatter {
 
   @Override
   public void addResolveSymbol(String symbol, DiceExprResult value) {
-    String str = "<span class=\"" + RESOLVE_SYMBOL_CLASS + "\"> read: " +
-        value.getStringResult() + " &larr; " + symbol + "</span>";
-    currentDetails.add(str);
+    currentDetails.add(
+        buildElement(
+            SPAN_ELEMENT,
+            RESOLVE_SYMBOL_CLASS,
+            hidden,
+          value.getStringResult() + " &larr; " + symbol
+        )
+    );
   }
 
   @Override
   public void addAssignSymbol(String symbol, DiceExprResult value) {
-    currentDetails.add("set " + symbol + " = " + value.getStringResult());
+    currentDetails.add(
+        buildElement(
+            SPAN_ELEMENT,
+            ASSIGN_SYMBOL_CLASS,
+            hidden,
+            symbol + " &rarr; " + value.getStringResult()
+        )
+    );
   }
 
   @Override
   public void addPromptValue(String prompt, DiceExprResult value) {
-    currentDetails.add("input (" + prompt + ") = " + value.getStringResult());
+    currentDetails.add(
+        buildElement(
+            SPAN_ELEMENT,
+            PROMPT_CLASS,
+            hidden,
+            "input (" + prompt + ") &rarr; " + value.getStringResult()
+        )
+    );
   }
 
   @Override
   public void addRoll(DiceRolls rolls) {
     StringBuilder sb = new StringBuilder();
 
-    sb.append(rolls.getNumberOfRolls()).append(rolls.getName()).append(rolls.getNumberOfSides());
-    sb.append(" = [");
-    String listOfRolls =
-        rolls.getDiceRolls().stream()
+    sb.append(buildElement(
+        SPAN_ELEMENT,
+        DICE_EXPRESSION_CLASS,
+        hidden,
+        rolls.getNumberOfRolls() + rolls.getName() + rolls.getNumberOfSides()
+    ));
+
+    String listOfRolls = rolls.getDiceRolls().stream()
             .map(
                 r -> {
-                  String postfix = "";
+                  sb.append(DIE_ROLL_CLASS);
                   if (r.isSuccess()) {
-                    postfix += "(s)";
+                    sb.append(" " + SUCCESSFUL_DIE_ROLL_CLASS);
                   }
                   if (r.isFailure()) {
-                    postfix += "(f)";
+                    sb.append(" " + FAILURE_DIE_ROLL_CLASS);
                   }
                   if (r.isFumble()) {
-                    postfix += "(F)";
+                    sb.append(" " + CRITICAL_SUCCESS_DIE_ROLL_CLASS);
                   }
                   if (r.isCritical()) {
-                    postfix += "(C)";
+                    sb.append(" " + CRITICAL_FUMBLE_DIE_ROLL_CLASS);
                   }
-                  return r.getValue() + postfix;
+                  return buildElement(
+                      SPAN_ELEMENT,
+                      sb.toString(),
+                      hidden,
+                      Integer.toString(r.getValue())
+                  );
                 })
-            .collect(Collectors.joining(", "));
+            .collect(Collectors.joining(", ")
+        );
 
-    sb.append(listOfRolls).append("] = ").append(rolls.getResult().getStringResult());
+    sb.append(
+        buildElement(
+            SPAN_ELEMENT,
+            ROLL_RESULT_CLASS,
+            hidden,
+            "[ " + listOfRolls + " ]"
+        )
+    );
+    sb.append(" = ").append(
+        buildElement(
+            SPAN_ELEMENT,
+            ROLL_RESULT_CLASS,
+            hidden,
+            rolls.getResult().getStringResult()
+        )
+    );
 
     currentDetails.add(sb.toString());
   }
@@ -160,32 +246,31 @@ public class HTMLResultFormatter implements ResultFormatter {
       return Optional.empty();
     }
 
-    sb.append(details.getExpression()).append(" = ").append(details.getResult()).append("\n");
-
-    details.getDetails().forEach(l -> sb.append("\t").append(l).append("\n"));
+    sb.append(buildElement(SPAN_ELEMENT, DICE_EXPRESSION_CLASS, hidden, details.getExpression()));
+    sb.append(" &Rarr; ");
+    sb.append(buildElement(SPAN_ELEMENT, RESULT_CLASS, hidden, details.getResult()));
+    details.getDetails().forEach(sb::append);
+    sb.append(buildEndOfElement(SPAN_ELEMENT));
 
     return Optional.of(sb.toString());
   }
 
   @Override
   public Optional<String> format() {
-    StringBuilder sb = new StringBuilder();
-    boolean first = true;
+    StringBuilder sbInner = new StringBuilder();
     for (var det : details) {
-      if (!first) {
-        sb.append("<br/>");
-      } else {
-        first = false;
-      }
-      var str = format(det);
-      str.ifPresent(sb::append);
+      format(det).ifPresent(sbInner::append);
     }
 
-    if (sb.length() > 0) {
-      return Optional.of(sb.toString());
-    } else {
-      return Optional.empty();
-    }
+    return Optional.of(
+        buildElement(
+            DIV_ELEMENT,
+            INLINE_ROLL_CLASS,
+            hidden,
+            sbInner.toString()
+      )
+    );
+
   }
 
   @Override
@@ -206,11 +291,13 @@ public class HTMLResultFormatter implements ResultFormatter {
   @Override
   public void start() {
     currentDetails = new LinkedList<>();
+    currentDetails.add(buildStartOfElement(DIV_ELEMENT, INLINE_ROLL_PART_CLASS, hidden));
     currentResult = "";
   }
 
   @Override
   public void end() {
+    currentDetails.add(buildEndOfElement(DIV_ELEMENT));
     details.add(new Details(currentResult, currentDetails, currentExpression));
   }
 }
