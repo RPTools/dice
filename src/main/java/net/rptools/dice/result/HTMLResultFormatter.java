@@ -187,25 +187,26 @@ public class HTMLResultFormatter implements ResultFormatter {
         rolls.getNumberOfRolls() + rolls.getName() + rolls.getNumberOfSides()
     ));
 
+    StringBuilder sbRolls = new StringBuilder();
     String listOfRolls = rolls.getDiceRolls().stream()
             .map(
                 r -> {
                   sb.append(DIE_ROLL_CLASS);
                   if (r.isSuccess()) {
-                    sb.append(" " + SUCCESSFUL_DIE_ROLL_CLASS);
+                    sbRolls.append(" " + SUCCESSFUL_DIE_ROLL_CLASS);
                   }
                   if (r.isFailure()) {
-                    sb.append(" " + FAILURE_DIE_ROLL_CLASS);
+                    sbRolls.append(" " + FAILURE_DIE_ROLL_CLASS);
                   }
                   if (r.isFumble()) {
-                    sb.append(" " + CRITICAL_SUCCESS_DIE_ROLL_CLASS);
+                    sbRolls.append(" " + CRITICAL_SUCCESS_DIE_ROLL_CLASS);
                   }
                   if (r.isCritical()) {
-                    sb.append(" " + CRITICAL_FUMBLE_DIE_ROLL_CLASS);
+                    sbRolls.append(" " + CRITICAL_FUMBLE_DIE_ROLL_CLASS);
                   }
                   return buildElement(
                       SPAN_ELEMENT,
-                      sb.toString(),
+                      sbRolls.toString(),
                       hidden,
                       Integer.toString(r.getValue())
                   );
