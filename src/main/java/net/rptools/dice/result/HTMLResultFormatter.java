@@ -38,7 +38,7 @@ public class HTMLResultFormatter implements ResultFormatter {
   private static final String SUCCESSFUL_DIE_ROLL_CLASS = "successfulDieRoll";
   private static final String FAILURE_DIE_ROLL_CLASS = "failureDieRoll";
   private static final String CRITICAL_SUCCESS_DIE_ROLL_CLASS = "criticalSuccessDieRoll";
-  private static final String CRITICAL_FUMBLE_DIE_ROLL_CLASS = "criticalFumbleDieRile";
+  private static final String CRITICAL_FUMBLE_DIE_ROLL_CLASS = "criticalFumbleDieRoll";
   private static final String ROLL_RESULT_CLASS = "rollResult";
 
   /** Class used to keep track of the output for each of the expressions. */
