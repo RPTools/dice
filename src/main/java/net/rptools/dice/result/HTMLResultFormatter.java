@@ -253,8 +253,7 @@ public class HTMLResultFormatter implements ResultFormatter {
     sb.append(buildElement(SPAN_ELEMENT, RESULT_CLASS, hidden, details.getResult()));
     sb.append(buildStartOfElement(DIV_ELEMENT, INLINE_ROLL_DETAILS_CLASS, hidden));
     sb.append(buildStartOfElement(DIV_ELEMENT, INLINE_ROLL_PART_CLASS, hidden));
-    sb.append(buildElement(DIV_ELEMENT, DICE_EXPRESSION_CLASS, hidden, details.getExpression()));
-    sb.append(" &Rarr; ");
+    sb.append(buildElement(DIV_ELEMENT, DICE_EXPRESSION_CLASS, hidden, details.getExpression() + " &#x21DD; "));
     details.getDetails().forEach(sb::append);
     sb.append(buildEndOfElement(DIV_ELEMENT));
     sb.append(buildEndOfElement(DIV_ELEMENT));
