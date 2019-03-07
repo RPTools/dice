@@ -185,10 +185,10 @@ public class HTMLResultFormatter implements ResultFormatter {
         rolls.getNumberOfRolls() + rolls.getName() + rolls.getNumberOfSides()
     ));
 
-    StringBuilder sbRolls = new StringBuilder();
     String listOfRolls = rolls.getDiceRolls().stream()
             .map(
                 r -> {
+                  StringBuilder sbRolls = new StringBuilder();
                   sbRolls.append(DIE_ROLL_CLASS);
                   if (r.isSuccess()) {
                     sbRolls.append(" " + SUCCESSFUL_DIE_ROLL_CLASS);
