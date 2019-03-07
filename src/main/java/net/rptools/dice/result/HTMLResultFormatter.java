@@ -246,12 +246,14 @@ public class HTMLResultFormatter implements ResultFormatter {
       return Optional.empty();
     }
 
+    currentDetails.add(buildStartOfElement(DIV_ELEMENT, INLINE_ROLL_PART_CLASS, hidden));
     sb.append(buildElement(SPAN_ELEMENT, RESULT_CLASS, hidden, details.getResult()));
     sb.append(buildStartOfElement(DIV_ELEMENT, INLINE_ROLL_DETAILS_CLASS, hidden));
     sb.append(buildElement(SPAN_ELEMENT, DICE_EXPRESSION_CLASS, hidden, details.getExpression()));
     sb.append(" &Rarr; ");
     details.getDetails().forEach(sb::append);
     sb.append(buildEndOfElement(DIV_ELEMENT));
+    currentDetails.add(buildEndOfElement(DIV_ELEMENT));
 
     return Optional.of(sb.toString());
   }
@@ -292,13 +294,11 @@ public class HTMLResultFormatter implements ResultFormatter {
   @Override
   public void start() {
     currentDetails = new LinkedList<>();
-    currentDetails.add(buildStartOfElement(DIV_ELEMENT, INLINE_ROLL_PART_CLASS, hidden));
     currentResult = "";
   }
 
   @Override
   public void end() {
-    currentDetails.add(buildEndOfElement(DIV_ELEMENT));
     details.add(new Details(currentResult, currentDetails, currentExpression));
   }
 }
