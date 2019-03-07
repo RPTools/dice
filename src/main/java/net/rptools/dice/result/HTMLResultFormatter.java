@@ -41,6 +41,7 @@ public class HTMLResultFormatter implements ResultFormatter {
   private static final String CRITICAL_FUMBLE_DIE_ROLL_CLASS = "criticalFumbleDieRoll";
   private static final String ROLL_RESULT_CLASS = "rollResult";
   private static final String INLINE_ROLL_DETAILS_CLASS = "inlineRollDetails";
+  private static final String DICE_EXPRESSION_PART_CLASS = "diceExpressionPart";
 
   /** Class used to keep track of the output for each of the expressions. */
   private static class Details {
@@ -180,8 +181,8 @@ public class HTMLResultFormatter implements ResultFormatter {
     StringBuilder sb = new StringBuilder();
 
     sb.append(buildElement(
-        SPAN_ELEMENT,
-        DICE_EXPRESSION_CLASS,
+        DIV_ELEMENT,
+        DICE_EXPRESSION_PART_CLASS,
         hidden,
         rolls.getNumberOfRolls() + rolls.getName() + rolls.getNumberOfSides()
     ));
@@ -229,7 +230,6 @@ public class HTMLResultFormatter implements ResultFormatter {
             rolls.getResult().getStringResult()
         )
     );
-    sb.append("<br/>");
 
     currentDetails.add(sb.toString());
   }
@@ -250,7 +250,7 @@ public class HTMLResultFormatter implements ResultFormatter {
     sb.append(buildElement(SPAN_ELEMENT, RESULT_CLASS, hidden, details.getResult()));
     sb.append(buildStartOfElement(DIV_ELEMENT, INLINE_ROLL_DETAILS_CLASS, hidden));
     sb.append(buildStartOfElement(DIV_ELEMENT, INLINE_ROLL_PART_CLASS, hidden));
-    sb.append(buildElement(SPAN_ELEMENT, DICE_EXPRESSION_CLASS, hidden, details.getExpression()));
+    sb.append(buildElement(DIV_ELEMENT, DICE_EXPRESSION_CLASS, hidden, details.getExpression()));
     sb.append(" &Rarr; ");
     details.getDetails().forEach(sb::append);
     sb.append(buildEndOfElement(DIV_ELEMENT));
