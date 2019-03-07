@@ -191,7 +191,7 @@ public class HTMLResultFormatter implements ResultFormatter {
     String listOfRolls = rolls.getDiceRolls().stream()
             .map(
                 r -> {
-                  sb.append(DIE_ROLL_CLASS);
+                  sbRolls.append(DIE_ROLL_CLASS);
                   if (r.isSuccess()) {
                     sbRolls.append(" " + SUCCESSFUL_DIE_ROLL_CLASS);
                   }
