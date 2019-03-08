@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import net.rptools.dice.DiceExprBaseVisitor;
+import net.rptools.dice.DiceExprParser;
 import net.rptools.dice.DiceExprParser.DargCriticalFailureContext;
 import net.rptools.dice.DiceExprParser.DargCriticalSuccessContext;
 import net.rptools.dice.DiceExprParser.DargFailContext;
@@ -31,6 +32,7 @@ import net.rptools.dice.roller.arguments.CriticalDiceRollerArgument;
 import net.rptools.dice.roller.arguments.DiceRollerArgument;
 import net.rptools.dice.roller.arguments.FailDiceRollerArgument;
 import net.rptools.dice.roller.arguments.FumbleDiceRollerArgument;
+import net.rptools.dice.roller.arguments.KeepHighestRollerArgument;
 import net.rptools.dice.roller.arguments.SuccessDiceRollerArgument;
 
 /** Visitor used to visit dice expression arguments in the parse expressiontree. */
@@ -93,21 +95,31 @@ public class DiceArgumentVisitor extends DiceExprBaseVisitor<List<DiceRollerArgu
 
   @Override
   public List<DiceRollerArgument> visitDargSuccess(DargSuccessContext ctx) {
-    if (ctx.val != null) {
-      System.out.println("HERE:   " + ctx.op + " " + ctx.val.getText());
-    } else {
-      System.out.println("HERE:   NULL");
-    }
     return Collections.singletonList(
         new SuccessDiceRollerArgument(
-            extractValue(ctx.val), ctx.op == null ? null : ctx.op.getText()));
+            extractValue(ctx.val), ctx.op == null ? null : ctx.op.getText()
+        )
+    );
   }
 
   @Override
   public List<DiceRollerArgument> visitDargFail(DargFailContext ctx) {
     return Collections.singletonList(
         new FailDiceRollerArgument(
-            extractValue(ctx.val), ctx.op == null ? null : ctx.op.getText()));
+            extractValue(ctx.val), ctx.op == null ? null : ctx.op.getText()
+        )
+    );
+  }
+  @Override
+  public List<DiceRollerArgument> visitDargKeepHighest(DiceExprParser.DargKeepHighestContext ctx) {
+    return Collections.singletonList(
+        new KeepHighestRollerArgument(extractValue(ctx.val))
+    );
+  }
+
+  @Override
+  public List<DiceRollerArgument> visitDargKeepLowest(DiceExprParser.DargKeepLowestContext ctx) {
+    return super.visitDargKeepLowest(ctx); // TODO
   }
 
   /*
@@ -130,17 +142,9 @@ public class DiceArgumentVisitor extends DiceExprBaseVisitor<List<DiceRollerArgu
   public List<DiceRollerArgument> visitDargDrop(DiceExprParser.DargDropContext ctx) {
       return super.visitDargDrop(ctx); // TODO
   }
+  */
 
-  @Override
-  public List<DiceRollerArgument> visitDargKeepHighest(DiceExprParser.DargKeepHighestContext ctx) {
-      return super.visitDargKeepHighest(ctx); // TODO
-  }
-
-  @Override
-  public List<DiceRollerArgument> visitDargKeepLowest(DiceExprParser.DargKeepLowestContext ctx) {
-      return super.visitDargKeepLowest(ctx); // TODO
-  }
-
+  /*
   @Override
   public List<DiceRollerArgument> visitDargDropHighest(DiceExprParser.DargDropHighestContext ctx) {
       return super.visitDargDropHighest(ctx); // TODO

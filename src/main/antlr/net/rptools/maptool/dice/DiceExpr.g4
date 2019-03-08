@@ -92,10 +92,12 @@ diceArgumentList            : '{' diceArgument ( ',' diceArgument )* '}'
                             ;
 
 
-diceArgument                : 'cs'   op=( '<' | '>' | '<=' | '>=' | '=' )? val=diceArgumentVal?    # dargCriticalSuccess
-                            | 'cf'   op=( '<' | '>' | '<=' | '>=' | '=' )? val=diceArgumentVal?    # dargCriticalFailure
-                            | 's'    op=( '<' | '>' | '<=' | '>=' | '=' )? val=diceArgumentVal    # dargSuccess
-                            | 'f'    op=( '<' | '>' | '<=' | '>=' | '=' )? val=diceArgumentVal    # dargFail
+diceArgument                : 'cs'   op=( '<' | '>' | '<=' | '>=' | '=' )? val=diceArgumentVal?  # dargCriticalSuccess
+                            | 'cf'   op=( '<' | '>' | '<=' | '>=' | '=' )? val=diceArgumentVal?  # dargCriticalFailure
+                            | 's'    op=( '<' | '>' | '<=' | '>=' | '=' )? val=diceArgumentVal   # dargSuccess
+                            | 'f'    op=( '<' | '>' | '<=' | '>=' | '=' )? val=diceArgumentVal   # dargFail
+                            | 'kh'   val=diceArgumentVal                                         # dargKeepHighest
+                            | 'kl'   val=diceArgumentVal                                         # dargKeepLowest
                             /*
                             | 'add'  val=diceArgumentVal                                         # dargAdd
                             | 'sub'  val=diceArgumentVal                                         # dargSubtract
@@ -105,8 +107,6 @@ diceArgument                : 'cs'   op=( '<' | '>' | '<=' | '>=' | '=' )? val=d
                             | 'ro'   op=( '<' | '>' | '<=' | '>=' | '=' )? val=diceArgumentVal?    # dargRerollOnce
                             | 'k'    op=( '<' | '>' | '<=' | '>=' | '=' )? val=diceArgumentVal    # dargKeep
                             | 'd'    op=( '<' | '>' | '<=' | '>=' | '=' )? val=diceArgumentVal    # dargDrop
-                            | 'kh'   val=diceArgumentVal                                         # dargKeepHighest
-                            | 'kl'   val=diceArgumentVal                                         # dargKeepLowest
                             | 'dh'   val=diceArgumentVal                                         # dargDropHighest
                             | 'dl'   val=diceArgumentVal                                         # dargDropLowest
                             | 'e'    op=( '<' | '>' | '<=' | '>=' | '=' )? val=diceArgumentVal?    # dargExplode
