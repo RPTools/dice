@@ -79,7 +79,7 @@ class ModifyDieRollFlags {
       List<DieRoll.DieRollFlags> newFlags = new LinkedList<>(roll.getFlags());
       newFlags.removeAll(mutuallyExclusive);
       newFlags.addAll(flags);
-      return roll.cloneWithNewFlags(newFlags);
+      return roll.withNewFlags(newFlags);
     } else {
       return roll;
     }

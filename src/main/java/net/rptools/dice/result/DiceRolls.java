@@ -283,4 +283,34 @@ public class DiceRolls {
   public DiceRollAggregateMethod getAggregateMethod() {
     return aggregateMethod;
   }
+
+  /**
+   * Clones this <code>DiceRolls</code> with a different {@link DiceRollAggregateMethod}.
+   *
+   * @param method The new {@link DiceRollAggregateMethod} to use for the roll.
+   * @return The new <code>DiceRolls</code>.
+   */
+  public DiceRolls applyNewAggregateMethod(DiceRollAggregateMethod method) {
+    return new DiceRolls(diceRolls, numberOfSides, getResult(), name, method);
+  }
+
+  /**
+   * Clones this <code>DiceRolls</code> with different rolls.
+   *
+   * @param rolls The new rolls to use.
+   * @return The new <code>DiceRolls</code>.
+   */
+  public DiceRolls applyNewRolls(Collection<DieRoll> rolls) {
+    return new DiceRolls(rolls, numberOfSides, getResult(), name, aggregateMethod);
+  }
+
+  /**
+   * Clones this <code>DiceRolls</code> with different total result.
+   *
+   * @param res The new total result.
+   * @return The new <code>DiceRolls</code>.
+   */
+  public DiceRolls applyNewResult(DiceExprResult res) {
+    return new DiceRolls(diceRolls, numberOfSides, res, name, aggregateMethod);
+  }
 }

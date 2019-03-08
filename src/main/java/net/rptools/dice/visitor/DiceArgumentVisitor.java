@@ -32,7 +32,7 @@ import net.rptools.dice.roller.arguments.CriticalDiceRollerArgument;
 import net.rptools.dice.roller.arguments.DiceRollerArgument;
 import net.rptools.dice.roller.arguments.FailDiceRollerArgument;
 import net.rptools.dice.roller.arguments.FumbleDiceRollerArgument;
-import net.rptools.dice.roller.arguments.KeepHighestRollerArgument;
+import net.rptools.dice.roller.arguments.KeepRollerArgument;
 import net.rptools.dice.roller.arguments.SuccessDiceRollerArgument;
 
 /** Visitor used to visit dice expression arguments in the parse expressiontree. */
@@ -113,13 +113,15 @@ public class DiceArgumentVisitor extends DiceExprBaseVisitor<List<DiceRollerArgu
   @Override
   public List<DiceRollerArgument> visitDargKeepHighest(DiceExprParser.DargKeepHighestContext ctx) {
     return Collections.singletonList(
-        new KeepHighestRollerArgument(extractValue(ctx.val))
+        KeepRollerArgument.keepHighest(extractValue(ctx.val))
     );
   }
 
   @Override
   public List<DiceRollerArgument> visitDargKeepLowest(DiceExprParser.DargKeepLowestContext ctx) {
-    return super.visitDargKeepLowest(ctx); // TODO
+    return Collections.singletonList(
+        KeepRollerArgument.keepLowest(extractValue(ctx.val))
+    );
   }
 
   /*

@@ -16,6 +16,9 @@ package net.rptools.dice.result;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 /** Class that represents the result of a single roll. */
@@ -155,7 +158,19 @@ public class DieRoll {
    * @param newFlags the new flags to use.
    * @return the new <code>DieRoll</code>.
    */
-  public DieRoll cloneWithNewFlags(Collection<DieRollFlags> newFlags) {
+  public DieRoll withNewFlags(Collection<DieRollFlags> newFlags) {
     return new DieRoll(value, newFlags, sides);
+  }
+
+  /**
+   * Returns a new <code>DieRoll</code> with the new flag added to the old ones.
+   *
+   * @param flag the new flags to use.
+   * @return the new <code>DieRoll</code>.
+   */
+  public DieRoll withAddedFlag(DieRollFlags flag) {
+    Set<DieRollFlags> newFlags = new HashSet<>(flags);
+    newFlags.add(flag);
+    return new DieRoll(value,  newFlags, sides);
   }
 }
