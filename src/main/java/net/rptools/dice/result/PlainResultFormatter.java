@@ -134,6 +134,9 @@ public class PlainResultFormatter implements ResultFormatter {
                   if (r.isCritical()) {
                     postfix += "(C)";
                   }
+                  if (r.isDropped()) {
+                    postfix += "(x)";
+                  }
                   return r.getValue() + postfix;
                 })
             .collect(Collectors.joining(rolls.getAggregateMethod().getOutputSeparator()));
