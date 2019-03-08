@@ -44,9 +44,15 @@ public class StandardDiceRoller implements DiceRoller {
         dr = a.applyToRoll(dr);
       }
       dieRolls.add(dr);
+
     }
 
-    return new DiceExprResult(
-        sum, new DiceRolls(dieRolls, numSides, pattern, DiceRollAggregateMethod.SUM));
+    DiceRolls diceRolls = new DiceRolls(dieRolls, numSides, pattern, DiceRollAggregateMethod.SUM);
+
+    for (DiceRollerArgument a : args) {
+      diceRolls = a.applyToAll(diceRolls);
+    }
+
+    return new DiceExprResult(diceRolls.getResult().getIntResult().getAsInt(), diceRolls);
   }
 }
