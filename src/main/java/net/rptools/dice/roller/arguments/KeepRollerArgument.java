@@ -64,6 +64,7 @@ public class KeepRollerArgument extends AbstractDiceRollerArgument {
 
     List<DieRoll> newRolls = new LinkedList<>(rolls.getDiceRolls());
     for (var d : drop) {
+      System.out.println("DROPPED " + d.dieRoll.getValue() + "[pos = " + d.position + "]");
       newRolls.set(d.position, newRolls.get(d.position).withAddedFlag(DieRollFlags.DROPPED));
     }
 
