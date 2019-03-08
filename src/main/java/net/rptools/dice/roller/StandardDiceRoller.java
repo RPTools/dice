@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import net.rptools.dice.result.DiceExprResult;
 import net.rptools.dice.result.DiceRolls;
+import net.rptools.dice.result.DiceRolls.DiceRollAggregateMethod;
 import net.rptools.dice.roller.arguments.DiceRollerArgument;
 import net.rptools.dice.result.DieRoll;
 
@@ -46,6 +47,6 @@ public class StandardDiceRoller implements DiceRoller {
     }
 
     return new DiceExprResult(
-        sum, new DiceRolls(dieRolls, numSides, DiceExprResult.getIntResult(sum), pattern));
+        sum, new DiceRolls(dieRolls, numSides, pattern, DiceRollAggregateMethod.SUM));
   }
 }

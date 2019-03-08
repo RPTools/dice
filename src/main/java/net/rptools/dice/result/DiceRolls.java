@@ -17,9 +17,72 @@ package net.rptools.dice.result;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
 /** This class holds a collection of {@link DieRoll}s and an aggregation of their flagged values. */
 public class DiceRolls {
+
+  /**
+   * How the result should be calculated.
+   */
+  public enum DiceRollAggregateMethod {
+    /** Count of non dropped rolls. */
+    COUNT(", ", dr ->
+        DiceExprResult.getIntResult((int)dr.getDiceRolls().stream().filter(r -> r.isDropped() == false).count())
+    ),
+    /** Sum of non dropped rolls. */
+    SUM(" + ", dr ->
+        DiceExprResult.getIntResult(
+            dr.getDiceRolls().stream().filter(r -> r.isKept()).mapToInt(r -> r.getValue()).sum()
+        )
+    ),
+    /** Count of successful non dropped rolls. */
+    COUNT_SUCCESS(", ", dr ->
+        DiceExprResult.getIntResult(
+            (int) dr.getDiceRolls().stream().filter(r -> r.isKept()).filter(r -> r.isSuccess()).count()
+        )
+    ),
+    /** Count of failed non dropped rolls. */
+    COUNT_FAILURE(", ", dr ->
+        DiceExprResult.getIntResult(
+            (int) dr.getDiceRolls().stream().filter(r -> r.isKept()).filter(r -> r.isFailure()).count()
+        )
+    ),
+    /** Sum the successful non dropped rolls. */
+    SUM_SUCCESS(" + ", dr ->
+        DiceExprResult.getIntResult(
+            dr.getDiceRolls().stream().filter(r -> r.isKept()).filter(r -> r.isSuccess()).mapToInt(r -> r.getValue()).sum()
+        )
+    ),
+    /** Sum the successful non dropped rolls. */
+    SUM_FAILURE(" + ", dr ->
+        DiceExprResult.getIntResult(
+            dr.getDiceRolls().stream().filter(r -> r.isKept()).filter(r -> r.isFailure()).mapToInt(r -> r.getValue()).sum()
+        )
+    ),
+    /** Other. */
+    OTHER(", ", dr -> dr.result);
+
+
+    private final String outputSeparator;
+    private final Function<DiceRolls, DiceExprResult> aggregate;
+
+
+    DiceRollAggregateMethod(String sep, Function<DiceRolls, DiceExprResult> agg) {
+      outputSeparator = sep;
+      aggregate = agg;
+    }
+
+    DiceExprResult perform(DiceRolls roll) {
+      return aggregate.apply(roll);
+    }
+
+    String getOutputSeparator() {
+      return outputSeparator;
+    }
+
+
+  }
 
   /** The {@link DieRoll} that make up this list of rolls. */
   private final List<DieRoll> diceRolls;
@@ -48,21 +111,30 @@ public class DiceRolls {
   /** Dice roll name. */
   private final String name;
 
+
+  /** The method used for determining how the result should be calculated. */
+  private final DiceRollAggregateMethod aggregateMethod;
+
   /** No dice were rolled in the create of this value. */
   @SuppressWarnings("WeakerAccess")
   public static DiceRolls NO_ROLLS =
       new DiceRolls(Collections.emptyList(), 0, DiceExprResult.getIntResult(0), "none");
 
+
   /**
-   * Creates a new <code>DiceRolls</code> to hold a collection of {@link DieRoll}s.
-   *
-   * @param rolls the {@link DieRoll}s.
+   * Creates a new <code>DiceRoll</code> object.
+   * @param rolls The rolls that make up the result.
+   * @param sides The number of sides for the rolls.
+   * @param res The result of the dice rolls (only used for {@link DiceRollAggregateMethod#OTHER}
+   * @param rollName The name of the dice roll.
+   * @param agg The method used for determining the result of the dice rolls.
    */
-  public DiceRolls(Collection<DieRoll> rolls, int sides, DiceExprResult res, String rollName) {
+  private DiceRolls(Collection<DieRoll> rolls, int sides, DiceExprResult res, String rollName, DiceRollAggregateMethod agg) {
     numberOfSides = sides;
     result = res;
     diceRolls = List.copyOf(rolls);
     name = rollName;
+    aggregateMethod = agg;
 
     int numSuccess = 0;
     int numFail = 0;
@@ -96,10 +168,34 @@ public class DiceRolls {
   }
 
   /**
-   * Returns the {@link DieRoll}s that make up this collection of rolls.
-   *
-   * @return the {@link DieRoll}s that make up the collection.
+   * Creates a new <code>DiceRoll</code> object with a pre-calculated result.
+   * @param rolls The rolls that make up the result.
+   * @param sides The number of sides for the rolls.
+   * @param res The result of the dice rolls (only used for {@link DiceRollAggregateMethod#OTHER}
+   * @param rollName The name of the dice roll.
    */
+  public DiceRolls(Collection<DieRoll> rolls, int sides, DiceExprResult res, String rollName) {
+    this(rolls, sides, res, rollName, DiceRollAggregateMethod.OTHER);
+  }
+
+
+  /**
+   * Creates a new <code>DiceRoll</code> object.
+   * @param rolls The rolls that make up the result.
+   * @param sides The number of sides for the rolls.
+   * @param rollName The name of the dice roll.
+   * @param agg The method used for determining the result of the dice rolls.
+   */
+  public DiceRolls(Collection<DieRoll> rolls, int sides, String rollName, DiceRollAggregateMethod agg) {
+    this(rolls, sides, DiceExprResult.UNDEFINED, rollName, agg);
+  }
+
+
+    /**
+     * Returns the {@link DieRoll}s that make up this collection of rolls.
+     *
+     * @return the {@link DieRoll}s that make up the collection.
+     */
   public Collection<DieRoll> getDiceRolls() {
     return diceRolls;
   }
@@ -168,7 +264,7 @@ public class DiceRolls {
    * @return the end result of the dice rolls.
    */
   public DiceExprResult getResult() {
-    return result;
+    return aggregateMethod.perform(this);
   }
 
   /**
@@ -178,5 +274,13 @@ public class DiceRolls {
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * Returns the method used to determine the result.
+   * @return The method used to determine the result.
+   */
+  public DiceRollAggregateMethod getAggregateMethod() {
+    return aggregateMethod;
   }
 }

@@ -21,6 +21,7 @@ import java.util.Set;
 /** Class that represents the result of a single roll. */
 public class DieRoll {
 
+
   /** The different types of flags for a die roll. */
   public enum DieRollFlags {
     /** The roll is a critical fumble. */
@@ -30,7 +31,9 @@ public class DieRoll {
     /** The roll is a success. */
     SUCCESS,
     /** The roll is a critical. */
-    CRITICAL
+    CRITICAL,
+    /** The roll has been dropped. */
+    DROPPED
   }
 
   /** The value of the roll. */
@@ -128,6 +131,22 @@ public class DieRoll {
    */
   public int getSides() {
     return sides;
+  }
+
+  /**
+   * Returns <code>true</code> if the die roll has been flagged as dropped.
+   * @return if the die roll has been flagged as dropped.
+   */
+  public boolean isDropped() {
+    return flags.contains(DieRollFlags.DROPPED);
+  }
+
+  /**
+   * Returns <code>true</code> if the die roll has not been flagged as dropped.
+   * @return if the die roll has not been flagged as dropped.
+   */
+  public boolean isKept() {
+    return isDropped() == false;
   }
 
   /**

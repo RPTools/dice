@@ -107,6 +107,30 @@ public class HTMLResultFormatter implements ResultFormatter {
   /** Should the output be hidden. */
   private boolean hidden = false;
 
+
+  private String getCSSClassForRoll(DieRoll roll) {
+    StringBuilder sbRolls = new StringBuilder();
+    sbRolls.append(DIE_ROLL_CLASS);
+    if (roll.isSuccess()) {
+      sbRolls.append(" " + SUCCESSFUL_DIE_ROLL_CLASS);
+    }
+    if (roll.isFailure()) {
+      sbRolls.append(" " + FAILURE_DIE_ROLL_CLASS);
+    }
+    if (roll.isFumble()) {
+      sbRolls.append(" " + CRITICAL_FUMBLE_DIE_ROLL_CLASS);
+    }
+    if (roll.isCritical()) {
+      sbRolls.append(" " + CRITICAL_SUCCESS_DIE_ROLL_CLASS);
+    }
+    return buildElement(
+        SPAN_ELEMENT,
+        sbRolls.toString(),
+        hidden,
+        Integer.toString(roll.getValue())
+    );
+  }
+
   private String buildStartOfElement(String elementName, String className, boolean isHidden) {
     StringBuilder sb = new StringBuilder();
     sb.append("<").append(elementName).append(" class=").append('"').append(className);
@@ -189,32 +213,14 @@ public class HTMLResultFormatter implements ResultFormatter {
         rolls.getNumberOfRolls() + rolls.getName() + rolls.getNumberOfSides()
     ));
 
-    String listOfRolls = rolls.getDiceRolls().stream()
-            .map(
-                r -> {
-                  StringBuilder sbRolls = new StringBuilder();
-                  sbRolls.append(DIE_ROLL_CLASS);
-                  if (r.isSuccess()) {
-                    sbRolls.append(" " + SUCCESSFUL_DIE_ROLL_CLASS);
-                  }
-                  if (r.isFailure()) {
-                    sbRolls.append(" " + FAILURE_DIE_ROLL_CLASS);
-                  }
-                  if (r.isFumble()) {
-                    sbRolls.append(" " + CRITICAL_FUMBLE_DIE_ROLL_CLASS);
-                  }
-                  if (r.isCritical()) {
-                    sbRolls.append(" " + CRITICAL_SUCCESS_DIE_ROLL_CLASS);
-                  }
-                  return buildElement(
-                      SPAN_ELEMENT,
-                      sbRolls.toString(),
-                      hidden,
-                      Integer.toString(r.getValue())
-                  );
-                })
-            .collect(Collectors.joining(", ")
-        );
+    String listOfRolls = rolls.getDiceRolls().stream().map(r ->
+        buildElement(
+            SPAN_ELEMENT,
+            getCSSClassForRoll(r),
+            hidden,
+            Integer.toString(r.getValue())
+        )
+    ).collect(Collectors.joining(rolls.getAggregateMethod().getOutputSeparator()));
 
     sb.append(" &Rarr; ").append(
         buildElement(

@@ -136,7 +136,7 @@ public class PlainResultFormatter implements ResultFormatter {
                   }
                   return r.getValue() + postfix;
                 })
-            .collect(Collectors.joining(", "));
+            .collect(Collectors.joining(rolls.getAggregateMethod().getOutputSeparator()));
 
     sb.append(listOfRolls).append("] = ").append(rolls.getResult().getStringResult());
 
