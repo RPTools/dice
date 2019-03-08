@@ -42,6 +42,7 @@ public class HTMLResultFormatter implements ResultFormatter {
   private static final String ROLL_RESULT_CLASS = "rollResult";
   private static final String INLINE_ROLL_DETAILS_CLASS = "inlineRollDetails";
   private static final String EXPANDED_DICE_ROLL_CLASS = "diceRollExpansion";
+  private static final String DROPPED_DIE_ROLL_CLASS = "droppedDieRoll";
 
 
   /** Class used to keep track of the output for each of the expressions. */
@@ -122,6 +123,9 @@ public class HTMLResultFormatter implements ResultFormatter {
     }
     if (roll.isCritical()) {
       rollClass.append(" " + CRITICAL_SUCCESS_DIE_ROLL_CLASS);
+    }
+    if (roll.isDropped()) {
+      rollClass.append(" " + DROPPED_DIE_ROLL_CLASS);
     }
     return rollClass.toString();
   }

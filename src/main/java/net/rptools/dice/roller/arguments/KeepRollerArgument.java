@@ -60,7 +60,7 @@ public class KeepRollerArgument extends AbstractDiceRollerArgument {
     }
 
     AtomicInteger counter = new AtomicInteger(0);
-    var drop = rolls.getDiceRolls().stream().map(r -> new DiePosition(counter.getAndIncrement(), r)).sorted().limit(numToDrop).collect(Collectors.toList());
+    var drop = rolls.getDiceRolls().stream().map(r -> new DiePosition(counter.getAndIncrement(), r)).sorted(comparator).limit(numToDrop).collect(Collectors.toList());
 
     List<DieRoll> newRolls = new LinkedList<>(rolls.getDiceRolls());
     for (var d : drop) {
