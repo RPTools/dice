@@ -109,26 +109,21 @@ public class HTMLResultFormatter implements ResultFormatter {
 
 
   private String getCSSClassForRoll(DieRoll roll) {
-    StringBuilder sbRolls = new StringBuilder();
-    sbRolls.append(DIE_ROLL_CLASS);
+    StringBuilder rollClass = new StringBuilder();
+    rollClass.append(DIE_ROLL_CLASS);
     if (roll.isSuccess()) {
-      sbRolls.append(" " + SUCCESSFUL_DIE_ROLL_CLASS);
+      rollClass.append(" " + SUCCESSFUL_DIE_ROLL_CLASS);
     }
     if (roll.isFailure()) {
-      sbRolls.append(" " + FAILURE_DIE_ROLL_CLASS);
+      rollClass.append(" " + FAILURE_DIE_ROLL_CLASS);
     }
     if (roll.isFumble()) {
-      sbRolls.append(" " + CRITICAL_FUMBLE_DIE_ROLL_CLASS);
+      rollClass.append(" " + CRITICAL_FUMBLE_DIE_ROLL_CLASS);
     }
     if (roll.isCritical()) {
-      sbRolls.append(" " + CRITICAL_SUCCESS_DIE_ROLL_CLASS);
+      rollClass.append(" " + CRITICAL_SUCCESS_DIE_ROLL_CLASS);
     }
-    return buildElement(
-        SPAN_ELEMENT,
-        sbRolls.toString(),
-        hidden,
-        Integer.toString(roll.getValue())
-    );
+    return rollClass.toString();
   }
 
   private String buildStartOfElement(String elementName, String className, boolean isHidden) {
