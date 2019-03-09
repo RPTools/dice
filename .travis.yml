@@ -3,16 +3,14 @@ sudo: false
 matrix:
   include:
     - os: osx
-      osx_image: xcode10
+      osx_image: xcode10.1
 script:
   - ./gradlew spotlessCheck check assemble
-notifications:
-  webhooks:
-    on_success:
-      - wget $TRAVIS_DISCORD_WEBHOOK_SCRIPT_URL
-      - chmod +x send.sh
-      - ./send.sh success $DISCORD_URL
-    on_failure:
-      - wget $TRAVIS_DISCORD_WEBHOOK_SCRIPT_URL
-      - chmod +x send.sh
-      - ./send.sh failure $DISCORD_URL
+on_success:
+  - wget $TRAVIS_DISCORD_WEBHOOK_SCRIPT_URL
+  - chmod +x send.sh
+  - ./send.sh success $DISCORD_URL
+on_failure:
+  - wget $TRAVIS_DISCORD_WEBHOOK_SCRIPT_URL
+  - chmod +x send.sh
+  - ./send.sh failure $DISCORD_URL
