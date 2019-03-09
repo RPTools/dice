@@ -30,9 +30,6 @@ class DiceExprResultTest {
    */
   private static boolean compareWithTolerance(double d1, double d2) {
     final double TOLERANCE = 1E-8;
-    if (Math.abs(d1 - d2) > TOLERANCE) {
-      System.out.println(d1 + " - " + d2 + " = " + (d1 - d2));
-    }
     return Math.abs(d1 - d2) < TOLERANCE;
   }
 

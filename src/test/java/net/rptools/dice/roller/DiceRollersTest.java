@@ -39,11 +39,10 @@ class DiceRollersTest {
                 assertEquals(diceRollers.getDiceRoller(p).getClass(), obj.getClass());
               }
             } else {
-              System.err.println(
-                  "Unable to register DiceRoller " + cl.getName() + " as it is wrong type.");
+                  fail("Unable to register DiceRoller " + cl.getName() + " as it is wrong type.");
             }
           } catch (Exception e) {
-            System.err.println("Unable to register DiceRoller " + cl.getName());
+            fail(e);
           }
         });
   }
