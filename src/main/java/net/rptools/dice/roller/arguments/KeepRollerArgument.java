@@ -4,8 +4,11 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.IntFunction;
+import java.util.function.ToIntBiFunction;
 import java.util.stream.Collectors;
 import net.rptools.dice.expressiontree.DiceExpressionNode;
+import net.rptools.dice.result.DiceExprResult;
 import net.rptools.dice.result.DiceRolls;
 import net.rptools.dice.result.DieRoll;
 import net.rptools.dice.result.DieRoll.DieRollFlags;
@@ -27,7 +30,13 @@ public class KeepRollerArgument extends AbstractDiceRollerArgument {
     // order to start marking lowest as dropped.
     return new KeepRollerArgument(
         val,
-        Comparator.comparingInt(d -> d.dieRoll.getValue())
+        Comparator.comparingInt(
+            d -> d.dieRoll.getValue()
+        ),
+        (dr, kra) -> {
+          int numToKeep = kra.getValue().getIntResult().orElseThrow(() -> new IllegalArgumentException("Expected number of rolls to keep"));
+          return dr.getNumberOfRolls() - numToKeep;
+        }
     );
   }
 
@@ -36,24 +45,33 @@ public class KeepRollerArgument extends AbstractDiceRollerArgument {
     // order to start marking lowest as dropped.
     return new KeepRollerArgument(
         val,
-        Comparator.comparing(d -> d.dieRoll.getValue(), Comparator.reverseOrder())
+        Comparator.comparing(
+            d -> d.dieRoll.getValue(),
+            Comparator.reverseOrder()
+        ),
+        (dr, kra) -> {
+          int numToKeep = kra.getValue().getIntResult().orElseThrow(() -> new IllegalArgumentException("Expected number of rolls to keep"));
+          return dr.getNumberOfRolls() - numToKeep;
+        }
     );
   }
 
 
 
   private final Comparator<DiePosition> comparator;
+  private final ToIntBiFunction<DiceRolls, KeepRollerArgument> numberToDrop;
 
-  private KeepRollerArgument(DiceExpressionNode val, Comparator<DiePosition> comp) {
+
+  private KeepRollerArgument(DiceExpressionNode val, Comparator<DiePosition> comp, ToIntBiFunction<DiceRolls, KeepRollerArgument> numToDrop) {
     super("=", val);
     comparator = comp;
+    numberToDrop = numToDrop;
   }
 
   @Override
   public DiceRolls applyToAll(DiceRolls rolls) {
 
-    int numToKeep = getValue().getIntResult().orElseThrow(() -> new IllegalArgumentException("Expected number of rolls to keep"));
-    int numToDrop = rolls.getNumberOfRolls() - numToKeep;
+    int numToDrop = numberToDrop.applyAsInt(rolls, this);
 
     if (numToDrop >= rolls.getNumberOfRolls()) {
       return DiceRolls.NO_ROLLS;
@@ -64,7 +82,6 @@ public class KeepRollerArgument extends AbstractDiceRollerArgument {
 
     List<DieRoll> newRolls = new LinkedList<>(rolls.getDiceRolls());
     for (var d : drop) {
-      System.out.println("DROPPED " + d.dieRoll.getValue() + "[pos = " + d.position + "]");
       newRolls.set(d.position, newRolls.get(d.position).withAddedFlag(DieRollFlags.DROPPED));
     }
 

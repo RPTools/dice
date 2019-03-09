@@ -98,6 +98,8 @@ diceArgument                : 'cs'   op=( '<' | '>' | '<=' | '>=' | '=' )? val=d
                             | 'f'    op=( '<' | '>' | '<=' | '>=' | '=' )? val=diceArgumentVal   # dargFail
                             | 'kh'   val=diceArgumentVal                                         # dargKeepHighest
                             | 'kl'   val=diceArgumentVal                                         # dargKeepLowest
+                            | 'dh'   val=diceArgumentVal                                         # dargDropHighest
+                            | 'dl'   val=diceArgumentVal                                         # dargDropLowest
                             /*
                             | 'add'  val=diceArgumentVal                                         # dargAdd
                             | 'sub'  val=diceArgumentVal                                         # dargSubtract
@@ -107,8 +109,6 @@ diceArgument                : 'cs'   op=( '<' | '>' | '<=' | '>=' | '=' )? val=d
                             | 'ro'   op=( '<' | '>' | '<=' | '>=' | '=' )? val=diceArgumentVal?    # dargRerollOnce
                             | 'k'    op=( '<' | '>' | '<=' | '>=' | '=' )? val=diceArgumentVal    # dargKeep
                             | 'd'    op=( '<' | '>' | '<=' | '>=' | '=' )? val=diceArgumentVal    # dargDrop
-                            | 'dh'   val=diceArgumentVal                                         # dargDropHighest
-                            | 'dl'   val=diceArgumentVal                                         # dargDropLowest
                             | 'e'    op=( '<' | '>' | '<=' | '>=' | '=' )? val=diceArgumentVal?    # dargExplode
                             | 'eo'   op=( '<' | '>' | '<=' | '>=' | '=' )? val=diceArgumentVal?    # dargExplodeOnce
                             | 'ce'   op=( '<' | '>' | '<=' | '>=' | '=' )? val=diceArgumentVal?    # dargCompoundExploding
