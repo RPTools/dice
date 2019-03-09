@@ -127,12 +127,16 @@ public class DiceArgumentVisitor extends DiceExprBaseVisitor<List<DiceRollerArgu
   // TODO HERE!!!!
   @Override
   public List<DiceRollerArgument> visitDargDropHighest(DiceExprParser.DargDropHighestContext ctx) {
-    return super.visitDargDropHighest(ctx); // TODO
+    return Collections.singletonList(
+        KeepRollerArgument.dropHighest(extractValue(ctx.val))
+    );
   }
 
   @Override
   public List<DiceRollerArgument> visitDargDropLowest(DiceExprParser.DargDropLowestContext ctx) {
-    return super.visitDargDropLowest(ctx); // TODO
+    return Collections.singletonList(
+        KeepRollerArgument.dropLowest(extractValue(ctx.val))
+    );
   }
 
   /*

@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntFunction;
 import java.util.function.ToIntBiFunction;
 import java.util.stream.Collectors;
+import net.rptools.dice.DiceExpression;
 import net.rptools.dice.expressiontree.DiceExpressionNode;
 import net.rptools.dice.result.DiceExprResult;
 import net.rptools.dice.result.DiceRolls;
@@ -56,6 +57,26 @@ public class KeepRollerArgument extends AbstractDiceRollerArgument {
     );
   }
 
+  public static KeepRollerArgument dropHighest(DiceExpressionNode val) {
+    return new KeepRollerArgument(
+        val,
+        Comparator.comparing(
+            d -> d.dieRoll.getValue(),
+            Comparator.reverseOrder()
+        ),
+        (dr, kra) -> dr.getNumberOfRolls()
+    );
+  }
+
+  public static KeepRollerArgument dropLowest(DiceExpressionNode val) {
+    return new KeepRollerArgument(
+        val,
+        Comparator.comparingInt(
+            d -> d.dieRoll.getValue()
+        ),
+        (dr, kra) -> dr.getNumberOfRolls()
+    );
+  }
 
 
   private final Comparator<DiePosition> comparator;
