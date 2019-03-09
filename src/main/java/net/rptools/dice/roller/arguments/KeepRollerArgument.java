@@ -64,7 +64,7 @@ public class KeepRollerArgument extends AbstractDiceRollerArgument {
             d -> d.dieRoll.getValue(),
             Comparator.reverseOrder()
         ),
-        (dr, kra) -> dr.getNumberOfRolls()
+        (dr, kra) -> kra.getValue().getIntResult().orElseThrow(() -> new IllegalArgumentException("Expected number of rolls to "))
     );
   }
 
@@ -74,7 +74,7 @@ public class KeepRollerArgument extends AbstractDiceRollerArgument {
         Comparator.comparingInt(
             d -> d.dieRoll.getValue()
         ),
-        (dr, kra) -> dr.getNumberOfRolls()
+        (dr, kra) -> kra.getValue().getIntResult().orElseThrow(() -> new IllegalArgumentException("Expected number of rolls to "))
     );
   }
 
