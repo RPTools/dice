@@ -96,10 +96,10 @@ diceArgument                : 'cs'   op=( '<' | '>' | '<=' | '>=' | '=' )? val=d
                             | 'cf'   op=( '<' | '>' | '<=' | '>=' | '=' )? val=diceArgumentVal?  # dargCriticalFailure
                             | 's'    op=( '<' | '>' | '<=' | '>=' | '=' )? val=diceArgumentVal   # dargSuccess
                             | 'f'    op=( '<' | '>' | '<=' | '>=' | '=' )? val=diceArgumentVal   # dargFail
-                            | 'kh'   val=diceArgumentVal                                         # dargKeepHighest
-                            | 'kl'   val=diceArgumentVal                                         # dargKeepLowest
-                            | 'dh'   val=diceArgumentVal                                         # dargDropHighest
-                            | 'dl'   val=diceArgumentVal                                         # dargDropLowest
+                            | 'kh'  '='? val=diceArgumentVal                                         # dargKeepHighest
+                            | 'kl'  '='? val=diceArgumentVal                                         # dargKeepLowest
+                            | 'dh'  '='? val=diceArgumentVal                                         # dargDropHighest
+                            | 'dl'  '='? val=diceArgumentVal                                         # dargDropLowest
                             /*
                             | 'add'  val=diceArgumentVal                                         # dargAdd
                             | 'sub'  val=diceArgumentVal                                         # dargSubtract

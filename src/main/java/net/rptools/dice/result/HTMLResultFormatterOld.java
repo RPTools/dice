@@ -21,29 +21,55 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /** This class implements a plain text */
-public class HTMLResultFormatter implements ResultFormatter {
+public class HTMLResultFormatterOld implements ResultFormatter {
+
+
+  private static final String HIDDEN_CLASS_NAME = "hidden";
+
+  private static final String SUCCESSFUL_DIE_ROLL_CLASS = "successfulDieRoll";
+  private static final String FAILURE_DIE_ROLL_CLASS = "failureDieRoll";
+  private static final String CRITICAL_SUCCESS_DIE_ROLL_CLASS = "criticalSuccessDieRoll";
+  private static final String CRITICAL_FUMBLE_DIE_ROLL_CLASS = "criticalFumbleDieRoll";
+  private static final String DROPPED_DIE_ROLL_CLASS = "droppedDieRoll";
 
   private static final String SPAN_ELEMENT = "span";
   private static final String DIV_ELEMENT = "div";
 
   private static final String RESOLVE_SYMBOL_CLASS = "resolveSymbol";
-  private static final String ASSIGN_SYMBOL_CLASS = "assignSymbol";
-  private static final String PROMPT_CLASS = "prompt";
-  private static final String INLINE_ROLL_PART_CLASS = "inlineRollPart";
-  private static final String INLINE_ROLL_CLASS = "inlineRoll";
-  private static final String HIDDEN_CLASS_NAME = "hidden";
-  private static final String DICE_EXPRESSION_CLASS = "diceExpression";
-  private static final String RESULT_CLASS = "diceResult";
-  private static final String DIE_ROLL_CLASS = "dieRoll";
-  private static final String SUCCESSFUL_DIE_ROLL_CLASS = "successfulDieRoll";
-  private static final String FAILURE_DIE_ROLL_CLASS = "failureDieRoll";
-  private static final String CRITICAL_SUCCESS_DIE_ROLL_CLASS = "criticalSuccessDieRoll";
-  private static final String CRITICAL_FUMBLE_DIE_ROLL_CLASS = "criticalFumbleDieRoll";
-  private static final String ROLL_RESULT_CLASS = "rollResult";
-  private static final String INLINE_ROLL_DETAILS_CLASS = "inlineRollDetails";
-  private static final String EXPANDED_DICE_ROLL_CLASS = "diceRollExpansion";
-  private static final String DROPPED_DIE_ROLL_CLASS = "droppedDieRoll";
+  private static final String RESOLVE_SYMBOL_ELEMENT = SPAN_ELEMENT;
 
+  private static final String ASSIGN_SYMBOL_CLASS = "assignSymbol";
+  private static final String ASSIGN_SYMBOL_ELEMENT = SPAN_ELEMENT;
+
+
+  private static final String PROMPT_CLASS = "prompt";
+  private static final String PROMPT_ELEMENT = SPAN_ELEMENT;
+
+
+  private static final String INLINE_ROLL_PART_CLASS = "inlineRollPart";
+  private static final String INLINE_ROLL_PART_ELEMENT = DIV_ELEMENT;
+
+  private static final String INLINE_ROLL_CLASS = "inlineRoll";
+  private static final String INLINE_ROLL_ELEMENT = DIV_ELEMENT;
+
+
+  private static final String DICE_EXPRESSION_CLASS = "diceExpression";
+  private static final String DICE_EXPRESSION_ELEMENT = SPAN_ELEMENT;
+
+  private static final String RESULT_CLASS = "diceResult";
+  private static final String RESULT_ELEMENT = SPAN_ELEMENT;
+
+  private static final String DIE_ROLL_CLASS = "dieRoll";
+  private static final String DIE_ROLL_ELEMENT = SPAN_ELEMENT;
+
+  private static final String ROLL_RESULT_CLASS = "rollResult";
+  private static final String ROLL_RESULT_ELEMENT = SPAN_ELEMENT;
+
+  private static final String INLINE_ROLL_DETAILS_CLASS = "inlineRollDetails";
+  private static final String INLINE_ROLL_DETAILS_ELEMENT = DIV_ELEMENT;
+
+  private static final String EXPANDED_DICE_ROLL_CLASS = "diceRollExpansion";
+  private static final String EXPANDED_DICE_ROLL_ELEMENT = DIV_ELEMENT;
 
   /** Class used to keep track of the output for each of the expressions. */
   private static class Details {
@@ -168,7 +194,7 @@ public class HTMLResultFormatter implements ResultFormatter {
   public void addResolveSymbol(String symbol, DiceExprResult value) {
     currentDetails.add(
         buildElement(
-            SPAN_ELEMENT,
+            RESOLVE_SYMBOL_ELEMENT,
             RESOLVE_SYMBOL_CLASS,
             hidden,
           value.getStringResult() + " &larr; " + symbol
@@ -180,7 +206,7 @@ public class HTMLResultFormatter implements ResultFormatter {
   public void addAssignSymbol(String symbol, DiceExprResult value) {
     currentDetails.add(
         buildElement(
-            SPAN_ELEMENT,
+            ASSIGN_SYMBOL_ELEMENT,
             ASSIGN_SYMBOL_CLASS,
             hidden,
             symbol + " &rarr; " + value.getStringResult()
@@ -192,7 +218,7 @@ public class HTMLResultFormatter implements ResultFormatter {
   public void addPromptValue(String prompt, DiceExprResult value) {
     currentDetails.add(
         buildElement(
-            SPAN_ELEMENT,
+            PROMPT_ELEMENT,
             PROMPT_CLASS,
             hidden,
             "input (" + prompt + ") &rarr; " + value.getStringResult()
@@ -204,9 +230,9 @@ public class HTMLResultFormatter implements ResultFormatter {
   public void addRoll(DiceRolls rolls) {
     StringBuilder sb = new StringBuilder();
 
-    sb.append(buildStartOfElement(DIV_ELEMENT, EXPANDED_DICE_ROLL_CLASS, hidden));
+    sb.append(buildStartOfElement(EXPANDED_DICE_ROLL_ELEMENT, EXPANDED_DICE_ROLL_CLASS, hidden));
     sb.append(buildElement(
-        SPAN_ELEMENT,
+        DICE_EXPRESSION_ELEMENT,
         DICE_EXPRESSION_CLASS,
         hidden,
         rolls.getNumberOfRolls() + rolls.getName() + rolls.getNumberOfSides()
@@ -214,7 +240,7 @@ public class HTMLResultFormatter implements ResultFormatter {
 
     String listOfRolls = rolls.getDiceRolls().stream().map(r ->
         buildElement(
-            SPAN_ELEMENT,
+            DIE_ROLL_ELEMENT,
             getCSSClassForRoll(r),
             hidden,
             Integer.toString(r.getValue())
@@ -223,7 +249,7 @@ public class HTMLResultFormatter implements ResultFormatter {
 
     sb.append(" &Rarr; ").append(
         buildElement(
-            SPAN_ELEMENT,
+            ROLL_RESULT_ELEMENT,
             ROLL_RESULT_CLASS,
             hidden,
             "[ " + listOfRolls + " ]"
@@ -255,10 +281,10 @@ public class HTMLResultFormatter implements ResultFormatter {
       return Optional.empty();
     }
 
-    sb.append(buildElement(SPAN_ELEMENT, RESULT_CLASS, hidden, details.getResult()));
-    sb.append(buildStartOfElement(DIV_ELEMENT, INLINE_ROLL_DETAILS_CLASS, hidden));
-    sb.append(buildStartOfElement(DIV_ELEMENT, INLINE_ROLL_PART_CLASS, hidden));
-    sb.append(buildElement(DIV_ELEMENT, DICE_EXPRESSION_CLASS, hidden, details.getExpression() + " &#x21DD; "));
+    sb.append(buildElement(RESULT_ELEMENT, RESULT_CLASS, hidden, details.getResult()));
+    sb.append(buildStartOfElement(INLINE_ROLL_DETAILS_ELEMENT, INLINE_ROLL_DETAILS_CLASS, hidden));
+    sb.append(buildStartOfElement(INLINE_ROLL_PART_ELEMENT, INLINE_ROLL_PART_CLASS, hidden));
+    sb.append(buildElement(DICE_EXPRESSION_ELEMENT, DICE_EXPRESSION_CLASS, hidden, details.getExpression() + " &#x21DD; "));
     details.getDetails().forEach(sb::append);
     sb.append(buildEndOfElement(DIV_ELEMENT));
     sb.append(buildEndOfElement(DIV_ELEMENT));
@@ -275,7 +301,7 @@ public class HTMLResultFormatter implements ResultFormatter {
 
     return Optional.of(
         buildElement(
-            DIV_ELEMENT,
+            INLINE_ROLL_ELEMENT,
             INLINE_ROLL_CLASS,
             hidden,
             sbInner.toString()
