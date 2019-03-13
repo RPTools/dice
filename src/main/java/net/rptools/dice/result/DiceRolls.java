@@ -77,7 +77,7 @@ public class DiceRolls {
       return aggregate.apply(roll);
     }
 
-    String getOutputSeparator() {
+    public String getOutputSeparator() {
       return outputSeparator;
     }
 

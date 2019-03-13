@@ -19,6 +19,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.4.0")
     compile("org.reflections", "reflections", "0.9.11")
     compile("org.apache.commons", "commons-text", "1.6")
+    compile("com.github.jknack:handlebars:4.1.2")
 }
 
 configure<JavaPluginConvention> {
