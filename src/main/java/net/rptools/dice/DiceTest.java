@@ -14,6 +14,7 @@
  */
 package net.rptools.dice;
 
+import net.rptools.dice.result.html.HTMLResultFormatter;
 import net.rptools.dice.result.PlainResultFormatter;
 import net.rptools.dice.symbols.DefaultDiceExpressionSymbolTable;
 import net.rptools.dice.symbols.DiceEvalScope;
@@ -38,6 +39,7 @@ public class DiceTest {
 
     diceExpression.execute(symbolTable);
     diceExpression.format(new PlainResultFormatter()).ifPresent(System.out::println);
+    diceExpression.format(new HTMLResultFormatter()).ifPresent(System.out::println);
 
     System.out.println("Local Variables");
     symbolTable
@@ -68,5 +70,7 @@ public class DiceTest {
               System.out.println(val.getType() + ":" + name + " = " + val.getStringResult());
             });
     System.out.println();
+    HTMLResultFormatter htmlResultFormatter = new HTMLResultFormatter();
   }
+
 }

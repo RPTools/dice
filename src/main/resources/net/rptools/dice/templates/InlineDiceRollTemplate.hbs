@@ -1,0 +1,60 @@
+<div class="inlineRoll">
+  {{# each diceResults }}
+    <span class="inlineRollResult">{{ value }}</span>
+    <div class="inlineRollDetails">
+      <ul class="inlineRollPart">
+        <li class="inlineRollPartDetails">
+          <ul>
+          <li class="inlineRollExpression">{{ expression }}>
+            {{# each details }}
+            <li class="inlineRollExpansion">
+              {{# if roll }}
+                <ul>
+                  <li>{{ expression }}</li>
+                  <li class="inlineRollRolls">
+                    {{# each rolls }}
+                      <ul>
+                        <li class="inlineDieRoll{{# if
+                            critical}} inlineCriticalDieRoll{{/if~}} {{# if
+                            fumble}} inlineFumbleDieRoll{{/if~}} {{# if
+                            success}} inlineSuccessDieRoll{{/if~}} {{# if
+                            failure}} inlineFailureDieRoll{{/if~}} {{# if
+                            dropped}} inlineDroppedDieRoll{{/if~}}">{{ value }}</li>
+                        <li data-rollDelim="{{ @../delimiter }}"></li>
+                      </ul>
+                    {{/each}}
+                  </li>
+                  <li class="inlineRollDetailsResult">{{ value }}</li>
+                </ul>
+              {{/if}}
+              {{# if prompt}}
+                <li class="inlineRollPrompt">
+                  <ul>
+                    <li class="inlineRollPromptName">{{ name }}</li>
+                    <li class="inlineRollPromptValue">{{ value }}</li>
+                  </ul>
+                </li>
+              {{/if}}
+              {{# if assignment }}
+                <li class="inlineRollAssignment">
+                  <ul>
+                    <li class="inlineRollAssignmentName">{{ name }}</li>
+                    <li class="inlineRollAssignmentValue">{{ value }}</li>
+                  </ul>
+                </li>
+              {{/if}}
+              {{# if lookup }}
+                <li class="inlineRollLookup">
+                  <ul>
+                    <li class="inlineRollLookupName">{{ name }}</li>
+                    <li class="inlineRollLookupValue">{{ value }}</li>
+                  </ul>
+                </li>
+              {{/if}}
+            {{/each}}
+          </ul>
+        </li>
+      </ul>
+    </div>
+  {{/each}}
+</div>
