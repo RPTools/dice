@@ -10,17 +10,17 @@
             <li class="inlineRollExpansion">
               {{# if roll }}
                 <ul>
-                  <li>{{ expression }}</li>
+                  <li class="inlineRollExpansionExpression">{{ expression }}</li>
                   <li class="inlineRollRolls">
                     {{# each rolls }}
                       <ul>
+                        {{# if @index }} <li data-rollDelim="{{ @../delimiter }}"></li>{{/if}}
                         <li class="inlineDieRoll{{# if
                             critical}} inlineCriticalDieRoll{{/if~}} {{# if
                             fumble}} inlineFumbleDieRoll{{/if~}} {{# if
                             success}} inlineSuccessDieRoll{{/if~}} {{# if
                             failure}} inlineFailureDieRoll{{/if~}} {{# if
                             dropped}} inlineDroppedDieRoll{{/if~}}">{{ value }}</li>
-                        <li data-rollDelim="{{ @../delimiter }}"></li>
                       </ul>
                     {{/each}}
                   </li>
